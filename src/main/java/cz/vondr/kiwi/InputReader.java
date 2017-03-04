@@ -1,7 +1,7 @@
 package cz.vondr.kiwi;
 
 import cz.vondr.kiwi.data.Data;
-import cz.vondr.kiwi.data.City;
+import cz.vondr.kiwi.data.Day;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,16 +42,14 @@ public class InputReader {
         String[] split = line.split(" ");
         short from = cityNameMapper.nameToIndex(split[0]);
         short to = cityNameMapper.nameToIndex(split[1]);
-        short day = parseShort(split[2]);
+        short dayIndex = parseShort(split[2]);
         int price = parseInt(split[3]);
 
-        if (data.days.size() <= day) {
-//            if (data.days.size() != day) {//just check
-//                throw new IllegalArgumentException("Unexpected input data. Day:" + day + " but size: " + data.days.size() + "");
-//            }
-            data.days.add(new City());
+        while (data.days.size() <= dayIndex) {
+            data.days.add(new Day());
         }
-        City city = data.days.get(day);
+        Day day = data.days.get(dayIndex);
+
 
 
         logger.info(line);

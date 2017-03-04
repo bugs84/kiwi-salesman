@@ -11,7 +11,7 @@ public class CityNameMapper {
     public short nameToIndex(String cityName) {
         Short index = nameMap.get(cityName);
         if (index == null) {
-            index = (short) (nameMap.size() + 1);
+            index = (short) (nameMap.size());
             nameMap.put(cityName, index);
             indexMap.put(index, cityName);
         }

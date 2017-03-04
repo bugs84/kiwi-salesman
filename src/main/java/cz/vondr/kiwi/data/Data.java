@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Data {
 
-    public List<City> days = new ArrayList<>();
+    public List<Day> days = new ArrayList<>();
 
     public short startTown = -1;
 
