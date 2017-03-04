@@ -9,9 +9,13 @@ import java.io.InputStream;
 public class Salesman {
     private final static Logger logger = LoggerFactory.getLogger(Salesman.class);
 
-    public static InputStream input;
+    private InputStream input;
     public static Data data = new Data();
     public static CityNameMapper cityNameMapper = new CityNameMapper();
+
+    public Salesman(InputStream input) {
+        this.input = input;
+    }
 
     public void start() throws Exception {
         new InputReader(input, data).readInputAndFillData();

@@ -8,10 +8,9 @@ public class SimpleTest {
 
     @Test
     public void testRun1() throws Exception {
-        InputStream is = this.getClass().getClassLoader().getResourceAsStream("SampleInput1.txt");
+        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("SampleInput1.txt");
 
-        Salesman.input = is;
-        Salesman salesman = new Salesman();
+        Salesman salesman = new Salesman(inputStream);
         salesman.start();
     }
 }
