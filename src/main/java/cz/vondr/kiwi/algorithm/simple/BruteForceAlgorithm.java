@@ -27,6 +27,10 @@ public class BruteForceAlgorithm {
         this.data = data;
     }
 
+    public Solution getBestSolution() {
+        return bestSolution;
+    }
+
     public void start() {
         short actualDay = 0;
         short actualCity = data.startCity;
@@ -34,8 +38,6 @@ public class BruteForceAlgorithm {
         int actualPrice = 0;
 
         doNextFlight(actualDay, actualCity, actualPath, actualPrice);
-
-
     }
 
     private void doNextFlight(short actualDay, short actualCity, short[] actualPath, int actualPrice) {
