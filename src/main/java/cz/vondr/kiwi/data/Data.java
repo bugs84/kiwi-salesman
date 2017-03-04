@@ -7,7 +7,7 @@ public class Data {
 
     public List<Day> days = new ArrayList<>();
 
-    public short startTown = -1;
+    public short startCity = -1;
 
 
 

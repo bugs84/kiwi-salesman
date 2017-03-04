@@ -21,4 +21,8 @@ public class CityNameMapper {
     public String indexToName(short index) {
         return indexMap.get(index);
     }
+
+    public short getNumberOfCities() {
+        return (short) indexMap.size();
+    }
 }

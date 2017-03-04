@@ -1,6 +1,7 @@
 package cz.vondr.kiwi;
 
 import cz.vondr.kiwi.data.Data;
+import cz.vondr.kiwi.algorithm.simple.BruteForceAlgorithm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,9 +19,11 @@ public class Salesman {
     }
 
     public void start() throws Exception {
+        logger.info("Start.");
         new InputReader(input, data).readInputAndFillData();
-
-        logger.info("ALL DATA READ.");
+        logger.info("All data was read.");
+        new BruteForceAlgorithm(data).start();
+        logger.info("End.");
     }
 
 

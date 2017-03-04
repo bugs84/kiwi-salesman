@@ -38,7 +38,7 @@ public class InputReader {
 
     private void readFirstLineWithStartTown() throws Exception {
         String startTown = input.readLine();
-        data.startTown = cityNameMapper.nameToIndex(startTown);
+        data.startCity = cityNameMapper.nameToIndex(startTown);
     }
 
     private void parseLine(String line) {
