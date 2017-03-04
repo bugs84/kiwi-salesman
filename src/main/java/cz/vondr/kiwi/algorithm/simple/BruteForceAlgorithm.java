@@ -49,7 +49,10 @@ public class BruteForceAlgorithm {
 
             //TODO instead of contains - use BitMask - to improve performance
             if (contains(actualPath, nextCity)) { //do not flight, where you already been
-                break;
+                continue;
+            }
+            if (nextCity == data.startCity && !(actualDay >= numberOfCities - 1)) {
+                continue;
             }
 
             short nextDay = (short) (actualDay + 1);
@@ -66,9 +69,11 @@ public class BruteForceAlgorithm {
                     }
                     logger.info("Solution found. Price = " + nextPrice + ", path=" + Arrays.toString(actualPath));
                 }
-                break;
+                continue;
             }
-            logger.info("Fly from " + actualCity + " to " + nextCity);
+
+
+//            logger.info("Fly from " + actualCity + " to " + nextCity);
             doNextFlight(nextDay, nextCity, nextPath, nextPrice);
         }
     }
