@@ -1,13 +1,16 @@
 package cz.vondr.kiwi;
 
+import cz.vondr.kiwi.data.City;
 import cz.vondr.kiwi.data.Data;
 import cz.vondr.kiwi.data.Day;
+import cz.vondr.kiwi.data.Flight;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.List;
 
 import static cz.vondr.kiwi.Salesman.cityNameMapper;
 import static java.lang.Integer.parseInt;
@@ -40,18 +43,30 @@ public class InputReader {
 
     private void parseLine(String line) {
         String[] split = line.split(" ");
+
+        //parse line
         short from = cityNameMapper.nameToIndex(split[0]);
         short to = cityNameMapper.nameToIndex(split[1]);
         short dayIndex = parseShort(split[2]);
         int price = parseInt(split[3]);
 
-        while (data.days.size() <= dayIndex) {
-            data.days.add(new Day());
+        //add flight
+        Day day = getDay(data.days, dayIndex);
+        City city = getCity(day.cities, from);
+        city.flights.add(new Flight(to, price));
+    }
+
+    private Day getDay(List<Day> list, short index) {
+        while (list.size() <= index) {
+            list.add(new Day());
         }
-        Day day = data.days.get(dayIndex);
+        return list.get(index);
+    }
 
-
-
-        logger.info(line);
+    private City getCity(List<City> list, short index) {
+        while (list.size() <= index) {
+            list.add(new City());
+        }
+        return list.get(index);
     }
 }

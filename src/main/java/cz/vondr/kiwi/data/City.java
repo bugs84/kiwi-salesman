@@ -4,5 +4,5 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class City {
-    List<Flight> flights = new ArrayList<>();
+    public List<Flight> flights = new ArrayList<>();
 }
