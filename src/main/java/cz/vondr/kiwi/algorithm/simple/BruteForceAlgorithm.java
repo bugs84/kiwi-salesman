@@ -53,7 +53,7 @@ public class BruteForceAlgorithm {
         logger.info("BruteForce Ended - testedFlights= " + testedFlights);
     }
 
-    private void doNextFlight(short actualDay, short actualCity,int actualPrice) {
+    private void doNextFlight(short actualDay, short actualCity, int actualPrice) {
         testedFlights++;
         Day day = data.days.get(actualDay);
         City city = day.cities.get(actualCity);
@@ -72,7 +72,6 @@ public class BruteForceAlgorithm {
             int nextPrice = actualPrice + flight.price;
 
 
-
             if (actualDay >= numberOfCities - 1) {
                 if (nextCity == data.startCity) {
                     if (nextPrice < bestSolution.price) {
@@ -80,7 +79,7 @@ public class BruteForceAlgorithm {
                         short[] pathCopy = Arrays.copyOf(actualPath, actualPath.length);
 
                         bestSolution = new Solution(pathCopy, nextPrice);
-                        logger.info("New Best solution found. Price = " + nextPrice + ", path=" + Arrays.toString(pathCopy) + ", testedFlights="+testedFlights);
+                        logger.info("New Best solution found. Price = " + nextPrice + ", path=" + Arrays.toString(pathCopy) + ", testedFlights=" + testedFlights);
                     }
 //                    logger.info("Solution found. Price = " + nextPrice + ", path=" + Arrays.toString(actualPath) + ", testedFlights="+testedFlights);
                 }

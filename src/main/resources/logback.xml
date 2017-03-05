@@ -7,8 +7,12 @@
     <immediateFlush>true</immediateFlush>
     <!-- encoders are assigned the type
          ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
+
+    <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+      <maxFileSize>2GB</maxFileSize>
+    </triggeringPolicy>
     <encoder>
-      <pattern>%-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>
+      <pattern>%-8relative [%thread] %-5level %logger{35} - %msg%n</pattern>
     </encoder>
   </appender>
 

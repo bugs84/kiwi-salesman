@@ -57,6 +57,20 @@ public class SimpleTest {
         testFromFile("c:\\prac\\Java\\Projects\\kiwi-salesman\\RealData\\data_15.txt");
     }
 
+    @Test
+    public void realData100() throws Exception {
+        testFromFile("c:\\prac\\Java\\Projects\\kiwi-salesman\\RealData\\data_100.txt");
+    }
+
+    @Test
+    public void realData200() throws Exception {
+        testFromFile("c:\\prac\\Java\\Projects\\kiwi-salesman\\RealData\\data_200.txt");
+    }
+
+    @Test
+    public void realData300() throws Exception {
+        testFromFile("c:\\prac\\Java\\Projects\\kiwi-salesman\\RealData\\data_300.txt");
+    }
 
 
     private void testFromFile(String inputDataFilePath) throws Exception {

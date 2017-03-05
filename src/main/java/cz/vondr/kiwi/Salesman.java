@@ -26,7 +26,10 @@ public class Salesman {
         logger.info("Start.");
         StopWatch dataReadWatch = new StopWatch();
         new InputReader(input, data).readInputAndFillData();
+        new PrepareData(data).prepare();
+
         logger.info("Input parsed. In " + dataReadWatch);
+
         BruteForceAlgorithm algorithm = new BruteForceAlgorithm(data);
         StopWatch algorithmWatch = new StopWatch();
         algorithm.start();
