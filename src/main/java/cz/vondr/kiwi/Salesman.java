@@ -21,15 +21,24 @@ public class Salesman {
     }
 
     public void start() throws Exception {
+        StopWatch wholeRun = new StopWatch();
+
         logger.info("Start.");
+        StopWatch dataReadWatch = new StopWatch();
         new InputReader(input, data).readInputAndFillData();
-        logger.info("All data was read.");
+        logger.info("Input parsed. In " + dataReadWatch);
         BruteForceAlgorithm algorithm = new BruteForceAlgorithm(data);
+        StopWatch algorithmWatch = new StopWatch();
         algorithm.start();
+        logger.info("Algorithm ended. In " + algorithmWatch);
+
+        StopWatch writeSolutionWatch = new StopWatch();
         Solution solution = algorithm.getBestSolution();
         new SolutionWriter(data, solution).writeSolutionToLog();
+        logger.info("Write solution ended. In " + writeSolutionWatch);
 
-        logger.info("End.");
+
+        logger.info("End. Whole run took: " + wholeRun);
     }
 
 
