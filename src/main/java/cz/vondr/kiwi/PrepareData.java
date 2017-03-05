@@ -10,14 +10,7 @@ import java.util.List;
 
 public class PrepareData {
 
-    //TODO lambda
-    private static final Comparator<Flight> FLIGHT_COMPARATOR = new Comparator<Flight>() {
-        @Override
-        public int compare(Flight o1, Flight o2) {
-            return o1.price - o2.price;
-        }
-    };
-
+    private static final Comparator<Flight> FLIGHT_COMPARATOR = (o1, o2) -> o1.price - o2.price;
 
     private Data data;
 

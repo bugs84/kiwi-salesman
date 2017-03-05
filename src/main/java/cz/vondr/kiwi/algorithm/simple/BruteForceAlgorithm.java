@@ -20,7 +20,6 @@ public class BruteForceAlgorithm {
 
     private Solution bestSolution = new Solution(null, MAX_VALUE);
 
-    //           data.days.cities.flights
     private Data data;
 
     private short numberOfCities = Salesman.cityNameMapper.getNumberOfCities();
@@ -29,6 +28,7 @@ public class BruteForceAlgorithm {
     private BitSet visitedTowns = new BitSet(numberOfCities - 1);
 
     {
+        //init actualPath
         for (int i = 0; i < actualPath.length; i++) {
             actualPath[i] = NO_CITY;
         }
@@ -45,7 +45,6 @@ public class BruteForceAlgorithm {
     public void start() {
         short actualDay = 0;
         short actualCity = data.startCity;
-//        short[] actualPath = new short[0];
         int actualPrice = 0;
 
         doNextFlight(actualDay, actualCity, actualPrice);
@@ -61,10 +60,8 @@ public class BruteForceAlgorithm {
             Flight flight = city.flights[actualFlight];
             short nextCity = flight.destination;
 
-            if (visitedTowns.get(nextCity)) { //do not flight, where you already been
-                continue;
-            }
-            if (nextCity == data.startCity && !(actualDay >= numberOfCities - 1)) {
+            //do not flight, where you already been  ||  flight to start, before last day
+            if (visitedTowns.get(nextCity) || (nextCity == data.startCity && !(actualDay >= numberOfCities - 1)) )  {
                 continue;
             }
 
@@ -75,9 +72,7 @@ public class BruteForceAlgorithm {
             if (actualDay >= numberOfCities - 1) {
                 if (nextCity == data.startCity) {
                     if (nextPrice < bestSolution.price) {
-
                         short[] pathCopy = Arrays.copyOf(actualPath, actualPath.length);
-
                         bestSolution = new Solution(pathCopy, nextPrice);
                         logger.info("New Best solution found. Price = " + nextPrice + ", path=" + Arrays.toString(pathCopy) + ", testedFlights=" + testedFlights);
                     }
@@ -86,10 +81,6 @@ public class BruteForceAlgorithm {
                 continue;
             }
 
-
-//            short[] nextPath = new short[actualPath.length + 1];
-//            System.arraycopy(actualPath, 0, nextPath, 0, actualPath.length);
-//            nextPath[nextPath.length - 1] = nextCity;
             actualPath[actualDay] = nextCity;
             visitedTowns.set(nextCity, true);
 
@@ -98,15 +89,6 @@ public class BruteForceAlgorithm {
             actualPath[actualDay] = NO_CITY;
             visitedTowns.set(nextCity, false);
         }
-    }
-
-    private boolean contains(short[] array, short value) {
-        for (int i = 0; i < array.length; i++) {
-            if (array[i] == value) {
-                return true;
-            }
-        }
-        return false;
     }
 
 }
