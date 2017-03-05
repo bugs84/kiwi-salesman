@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
+import java.util.BitSet;
 
 import static java.lang.Integer.MAX_VALUE;
 
@@ -25,6 +26,7 @@ public class BruteForceAlgorithm {
     private short numberOfCities = Salesman.cityNameMapper.getNumberOfCities();
     private long testedFlights = 0;
     private short[] actualPath = new short[numberOfCities - 1];
+    private BitSet visitedTowns = new BitSet(numberOfCities - 1);
 
     {
         for (int i = 0; i < actualPath.length; i++) {
@@ -59,8 +61,7 @@ public class BruteForceAlgorithm {
             Flight flight = city.flights.get(actualFlight);
             short nextCity = flight.destination;
 
-            //TODO instead of contains - use BitMask - to improve performance
-            if (contains(actualPath, nextCity)) { //do not flight, where you already been
+            if (visitedTowns.get(nextCity)) { //do not flight, where you already been
                 continue;
             }
             if (nextCity == data.startCity && !(actualDay >= numberOfCities - 1)) {
@@ -91,10 +92,12 @@ public class BruteForceAlgorithm {
 //            System.arraycopy(actualPath, 0, nextPath, 0, actualPath.length);
 //            nextPath[nextPath.length - 1] = nextCity;
             actualPath[actualDay] = nextCity;
+            visitedTowns.set(nextCity, true);
 
 //            logger.info("Fly from " + actualCity + " to " + nextCity);
             doNextFlight(nextDay, nextCity, nextPrice);
             actualPath[actualDay] = NO_CITY;
+            visitedTowns.set(nextCity, false);
         }
     }
 
