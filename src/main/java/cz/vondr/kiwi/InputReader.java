@@ -51,9 +51,9 @@ public class InputReader {
         int price = parseInt(split[3]);
 
         //add flight
-        Day day = getDay(data.days, dayIndex);
-        City city = getCity(day.cities, from);
-        city.flights.add(new Flight(to, price));
+        Day day = getDay(data.daysInput, dayIndex);
+        City city = getCity(day.citiesInput, from);
+        city.flightsInput.add(new Flight(to, price));
     }
 
     private Day getDay(List<Day> list, short index) {

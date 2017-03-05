@@ -55,10 +55,10 @@ public class BruteForceAlgorithm {
 
     private void doNextFlight(short actualDay, short actualCity, int actualPrice) {
         testedFlights++;
-        Day day = data.days.get(actualDay);
-        City city = day.cities.get(actualCity);
-        for (int actualFlight = 0; actualFlight < city.flights.size(); actualFlight++) {
-            Flight flight = city.flights.get(actualFlight);
+        Day day = data.days[actualDay];
+        City city = day.cities[actualCity];
+        for (int actualFlight = 0; actualFlight < city.flights.length; actualFlight++) {
+            Flight flight = city.flights[actualFlight];
             short nextCity = flight.destination;
 
             if (visitedTowns.get(nextCity)) { //do not flight, where you already been

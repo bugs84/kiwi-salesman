@@ -4,5 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Day {
-    public List<City> cities = new ArrayList<>();
+
+    public City[] cities;
+    public List<City> citiesInput = new ArrayList<>();
 }

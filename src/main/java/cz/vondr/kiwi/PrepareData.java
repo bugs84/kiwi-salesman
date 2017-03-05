@@ -10,6 +10,7 @@ import java.util.List;
 
 public class PrepareData {
 
+    //TODO lambda
     private static final Comparator<Flight> FLIGHT_COMPARATOR = new Comparator<Flight>() {
         @Override
         public int compare(Flight o1, Flight o2) {
@@ -26,14 +27,22 @@ public class PrepareData {
 
     void prepare() {
         //sort flights
-        List<Day> days = data.days;
+        List<Day> days = data.daysInput;
         for (int dayI = 0; dayI < days.size(); dayI++) {
-            List<City> cities = days.get(dayI).cities;
+            Day day = days.get(dayI);
+            List<City> cities = day.citiesInput;
             for (int cityI = 0; cityI < cities.size(); cityI++) {
-                List<Flight> flights = cities.get(cityI).flights;
+                City city = cities.get(cityI);
+                List<Flight> flights = city.flightsInput;
                 flights.sort(FLIGHT_COMPARATOR);
+                city.flights = city.flightsInput.toArray(new Flight[city.flightsInput.size()]);
+                city.flightsInput = null;
             }
+            day.cities = day.citiesInput.toArray(new City[day.citiesInput.size()]);
+            day.citiesInput = null;
         }
+        data.days = data.daysInput.toArray(new Day[data.daysInput.size()]);
+        data.daysInput = null;
     }
 
 }

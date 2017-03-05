@@ -5,6 +5,7 @@ import cz.vondr.kiwi.data.Flight;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -64,7 +65,7 @@ public class SolutionWriter {
     }
 
     private int getFlightPrice(short fromIndex, short toIndex, short dayIndex) {
-        List<Flight> flights = data.days.get(dayIndex).cities.get(fromIndex).flights.stream().filter(flight -> flight.destination == toIndex).collect(Collectors.toList());
+        List<Flight> flights = Arrays.stream(data.days[dayIndex].cities[fromIndex].flights).filter(flight -> flight.destination == toIndex).collect(Collectors.toList());
         if (flights.size() != 1) {
             throw new IllegalStateException("Cannot output. Expected 1 flight, but was found " + flights.size() + ". From=" + fromIndex + ", to=" + toIndex + ", day=" + dayIndex + "");
         }

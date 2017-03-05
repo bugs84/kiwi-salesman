@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Data {
-
-    public List<Day> days = new ArrayList<>();
+    public Day[] days;
+    public List<Day> daysInput = new ArrayList<>();
 
     public short startCity = -1;
 
