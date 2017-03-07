@@ -16,13 +16,13 @@ import static cz.vondr.kiwi.Salesman.cityNameMapper;
 import static java.lang.Integer.parseInt;
 import static java.lang.Short.parseShort;
 
-public class InputReader {
-    private final static Logger logger = LoggerFactory.getLogger(InputReader.class);
+public class InputParser {
+    private final static Logger logger = LoggerFactory.getLogger(InputParser.class);
 
     private BufferedReader input;
     private Data data;
 
-    public InputReader(InputStream input, Data data) {
+    public InputParser(InputStream input, Data data) {
         this.input = new BufferedReader(new InputStreamReader(input));
         this.data = data;
     }
@@ -30,6 +30,7 @@ public class InputReader {
     public void readInputAndFillData() throws Exception {
         String line = null;
         readFirstLineWithStartTown();
+        //TODO DO NOT READ WHOLE LINE
         while ((line = input.readLine()) != null) {
             parseLine(line);
         }
@@ -42,6 +43,7 @@ public class InputReader {
     }
 
     private void parseLine(String line) {
+        //TODO do not use regexp
         String[] split = line.split(" ");
 
         //parse line

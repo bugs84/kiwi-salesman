@@ -1,6 +1,6 @@
 package cz.vondr.kiwi;
 
-import cz.vondr.kiwi.algorithm.simple.BruteForceAlgorithm;
+import cz.vondr.kiwi.algorithm.pq.PriorityQueueAlgorithm;
 import cz.vondr.kiwi.algorithm.simple.Solution;
 import cz.vondr.kiwi.algorithm.simple.SolutionWriter;
 import cz.vondr.kiwi.data.Data;
@@ -25,12 +25,13 @@ public class Salesman {
 
         logger.info("Start.");
         StopWatch dataReadWatch = new StopWatch();
-        new InputReader(input, data).readInputAndFillData();
+        new InputParser(input, data).readInputAndFillData();
         new PrepareData(data).prepare();
 
         logger.info("Input parsed. In " + dataReadWatch);
 
-        BruteForceAlgorithm algorithm = new BruteForceAlgorithm(data);
+//        SimpleBruteForceAlgorithm algorithm = new SimpleBruteForceAlgorithm(data);
+        PriorityQueueAlgorithm algorithm = new PriorityQueueAlgorithm(data);
         StopWatch algorithmWatch = new StopWatch();
         algorithm.start();
         logger.info("Algorithm ended. In " + algorithmWatch);

@@ -13,9 +13,9 @@ import java.util.BitSet;
 
 import static java.lang.Integer.MAX_VALUE;
 
-public class BruteForceAlgorithm {
+public class SimpleBruteForceAlgorithm {
 
-    private final static Logger logger = LoggerFactory.getLogger(BruteForceAlgorithm.class);
+    private final static Logger logger = LoggerFactory.getLogger(SimpleBruteForceAlgorithm.class);
     private static final int NO_CITY = -1;
 
     private Solution bestSolution = new Solution(null, MAX_VALUE);
@@ -25,7 +25,7 @@ public class BruteForceAlgorithm {
     private short numberOfCities = Salesman.cityNameMapper.getNumberOfCities();
     private long testedFlights = 0;
     private short[] actualPath = new short[numberOfCities - 1];
-    private BitSet visitedTowns = new BitSet(numberOfCities - 1);
+    private BitSet visitedTowns = new BitSet(numberOfCities);
 
     {
         //init actualPath
@@ -34,7 +34,7 @@ public class BruteForceAlgorithm {
         }
     }
 
-    public BruteForceAlgorithm(Data data) {
+    public SimpleBruteForceAlgorithm(Data data) {
         this.data = data;
     }
 
