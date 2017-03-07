@@ -2,7 +2,7 @@ package cz.vondr.kiwi.algorithm.pq;
 
 import cz.vondr.kiwi.Salesman;
 import cz.vondr.kiwi.algorithm.simple.SimpleBruteForceAlgorithm;
-import cz.vondr.kiwi.algorithm.simple.Solution;
+import cz.vondr.kiwi.Solution;
 import cz.vondr.kiwi.data.City;
 import cz.vondr.kiwi.data.Data;
 import cz.vondr.kiwi.data.Day;

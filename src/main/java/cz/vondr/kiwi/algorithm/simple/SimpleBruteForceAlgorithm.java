@@ -1,6 +1,7 @@
 package cz.vondr.kiwi.algorithm.simple;
 
 import cz.vondr.kiwi.Salesman;
+import cz.vondr.kiwi.Solution;
 import cz.vondr.kiwi.data.City;
 import cz.vondr.kiwi.data.Data;
 import cz.vondr.kiwi.data.Day;

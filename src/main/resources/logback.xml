@@ -1,5 +1,8 @@
 <configuration>
 
+  <!--zamezi vypisum do konzole i kdyz je konfigurace logbacku spatne-->
+  <statusListener class="ch.qos.logback.core.status.NopStatusListener" />
+
   <appender name="FILE" class="ch.qos.logback.core.FileAppender">
     <file>logs/log.log</file>
     <append>true</append>

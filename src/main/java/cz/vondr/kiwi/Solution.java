@@ -1,4 +1,4 @@
-package cz.vondr.kiwi.algorithm.simple;
+package cz.vondr.kiwi;
 
 public class Solution {
     /** startCity is not in path. Not in the begging, not in the end **/

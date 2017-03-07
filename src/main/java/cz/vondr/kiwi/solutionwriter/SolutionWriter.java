@@ -1,5 +1,6 @@
-package cz.vondr.kiwi.algorithm.simple;
+package cz.vondr.kiwi.solutionwriter;
 
+import cz.vondr.kiwi.Solution;
 import cz.vondr.kiwi.data.Data;
 import cz.vondr.kiwi.data.Flight;
 import org.slf4j.Logger;
@@ -22,11 +23,27 @@ public class SolutionWriter {
         this.solution = solution;
     }
 
+    public void writeSolutionToSystemOutput() throws Exception {
+        write(System.out);
+    }
+
     public void writeSolutionToLog() throws Exception {
         StringBuilder stringBuilder = new StringBuilder();
         write(stringBuilder);
-        logger.info("Solution:\n" + stringBuilder.toString());
+        writeSolutionStringToLog(stringBuilder.toString());
     }
+
+    public void writeSolutionToSystemOutputAndLog() throws Exception {
+        StringBuilder stringBuilder = new StringBuilder();
+        write(new WriteInTwoAppendables(System.out, stringBuilder));
+        writeSolutionStringToLog(stringBuilder.toString());
+    }
+
+    private void writeSolutionStringToLog(String solutionString) {
+        logger.info("Solution:\n" + solutionString);
+    }
+
+
 
     // sample output
 //    53
