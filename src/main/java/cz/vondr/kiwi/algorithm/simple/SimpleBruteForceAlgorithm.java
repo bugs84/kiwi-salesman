@@ -22,24 +22,23 @@ public class SimpleBruteForceAlgorithm {
 
     private Data data;
 
-    private short numberOfCities = Salesman.cityNameMapper.getNumberOfCities();
+    private short numberOfCities;
     private long testedFlights = 0;
-    private short[] actualPath = new short[numberOfCities - 1];
-    private BitSet visitedTowns = new BitSet(numberOfCities);
-
-    {
-        //init actualPath
-        for (int i = 0; i < actualPath.length; i++) {
-            actualPath[i] = NO_CITY;
-        }
-    }
-
-    public SimpleBruteForceAlgorithm(Data data) {
-        this.data = data;
-    }
+    private short[] actualPath;
+    private BitSet visitedCities;
 
     public Solution getBestSolution() {
         return bestSolution;
+    }
+
+    public void init() {
+        this.data = Salesman.data;
+        numberOfCities = Salesman.cityNameMapper.getNumberOfCities();
+        actualPath = new short[numberOfCities - 1];
+        for (int i = 0; i < actualPath.length; i++) {
+            actualPath[i] = NO_CITY;
+        }
+        visitedCities = new BitSet(numberOfCities);
     }
 
     public void start() {
@@ -61,7 +60,7 @@ public class SimpleBruteForceAlgorithm {
             short nextCity = flight.destination;
 
             //do not flight, where you already been  ||  flight to start, before last day
-            if (visitedTowns.get(nextCity) || (nextCity == data.startCity && !(actualDay >= numberOfCities - 1)) )  {
+            if (visitedCities.get(nextCity) || (nextCity == data.startCity && !(actualDay >= numberOfCities - 1)) )  {
                 continue;
             }
 
@@ -82,12 +81,12 @@ public class SimpleBruteForceAlgorithm {
             }
 
             actualPath[actualDay] = nextCity;
-            visitedTowns.set(nextCity, true);
+            visitedCities.set(nextCity, true);
 
 //            logger.info("Fly from " + actualCity + " to " + nextCity);
             doNextFlight(nextDay, nextCity, nextPrice);
             actualPath[actualDay] = NO_CITY;
-            visitedTowns.set(nextCity, false);
+            visitedCities.set(nextCity, false);
         }
     }
 

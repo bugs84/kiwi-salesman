@@ -34,7 +34,7 @@ public class PriorityQueueAlgorithm {
     //TODO tohle vyhodit, dobre jen pro ladeni.
     private long testedFlights = 0;
 
-    private short numberOfCities = Salesman.cityNameMapper.getNumberOfCities();
+    private short numberOfCities;
 
     private Solution bestSolution = new Solution(null, MAX_VALUE);
 
@@ -53,8 +53,9 @@ public class PriorityQueueAlgorithm {
     }
 
 
-    public PriorityQueueAlgorithm(Data data) {
-        this.data = data;
+    public void init() {
+        this.data = Salesman.data;
+        numberOfCities = Salesman.cityNameMapper.getNumberOfCities();
     }
 
     public void start() {
@@ -109,6 +110,8 @@ public class PriorityQueueAlgorithm {
 
         }
 
+
+        logger.info("Algorithm ended - TestedFlights=" + testedFlights);
 
     }
 

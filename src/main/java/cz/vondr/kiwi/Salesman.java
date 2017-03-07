@@ -23,6 +23,10 @@ public class Salesman {
     public void start() throws Exception {
         StopWatch wholeRun = new StopWatch();
 
+//                SimpleBruteForceAlgorithm algorithm = new SimpleBruteForceAlgorithm();
+        PriorityQueueAlgorithm algorithm = new PriorityQueueAlgorithm();
+
+
         logger.info("Start.");
         StopWatch dataReadWatch = new StopWatch();
         new InputParser(input, data).readInputAndFillData();
@@ -30,9 +34,8 @@ public class Salesman {
 
         logger.info("Input parsed. In " + dataReadWatch);
 
-//        SimpleBruteForceAlgorithm algorithm = new SimpleBruteForceAlgorithm(data);
-        PriorityQueueAlgorithm algorithm = new PriorityQueueAlgorithm(data);
         StopWatch algorithmWatch = new StopWatch();
+        algorithm.init();
         algorithm.start();
         logger.info("Algorithm ended. In " + algorithmWatch);
 
