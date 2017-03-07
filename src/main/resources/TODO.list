@@ -4,6 +4,8 @@ Zkompilovat bez Debugger infa
 
 spustit jvm v server módu
 
+Kdyz by tam nato byl nekde cas. Tak zahrat JVM!!!!!!!!!!  To by sakrys fakt pomohlo!!!!!
+
 TODO na ostry run se da vyhazet logger i z gradle. uplne vyhodit zavislost (udelal bych to vedle v branchi)
 
 TODO aby se ten program vzdy cely ukoncil potom co da vysledek...
@@ -11,5 +13,13 @@ TODO aby se ten program vzdy cely ukoncil potom co da vysledek...
 Mam tam predpoklad, ze data jsou serazeny po dnech.  Ale je to pravda? jsou ty data takova? = NE! nejsou opravit nacitani, jestli je potreba
 
 Solution writer ma predpoklad, ze jeden den neni mezi dvema mesty vic letu.  Je to pravda? plati to?
+
+
+
+
+TODO
+  - potrebujeme nagenerovat/ziskat dalsi datasety
+  - potrebujeme zjistit jestli je mezi  zavolanim spustitelneho souboru a poslanim na vstup nejaky cas. A od kdy presne se 30s meri?
+  - potrebujeme rozjet prostredi na tom jejich docker image
 
 

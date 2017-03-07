@@ -18,7 +18,7 @@ import java.util.Queue;
 
 import static java.lang.Integer.MAX_VALUE;
 
-public class PriorityQueueAlgorithm {
+public class PriorityQueueAlgorithm implements cz.vondr.kiwi.algorithm.Algorithm {
     private final static Logger logger = LoggerFactory.getLogger(SimpleBruteForceAlgorithm.class);
 
     private static final int QUEUE_INITIAL_CAPACITY = 5000;
@@ -48,16 +48,19 @@ public class PriorityQueueAlgorithm {
         testedFlights++;
     }
 
+    @Override
     public Solution getBestSolution() {
         return bestSolution;
     }
 
 
+    @Override
     public void init() {
         this.data = Salesman.data;
         numberOfCities = Salesman.cityNameMapper.getNumberOfCities();
     }
 
+    @Override
     public void start() {
         //Initial state                       /** bitset 0 = vsechno false */
         addToQueue(new Progress(new short[0], new BitSet(numberOfCities), 0));
@@ -113,6 +116,11 @@ public class PriorityQueueAlgorithm {
 
         logger.info("Algorithm ended - TestedFlights=" + testedFlights);
 
+    }
+
+    @Override
+    public void stop() {
+        //TODO implement stop
     }
 
 

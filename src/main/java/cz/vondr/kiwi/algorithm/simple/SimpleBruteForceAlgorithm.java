@@ -2,6 +2,7 @@ package cz.vondr.kiwi.algorithm.simple;
 
 import cz.vondr.kiwi.Salesman;
 import cz.vondr.kiwi.Solution;
+import cz.vondr.kiwi.algorithm.Algorithm;
 import cz.vondr.kiwi.data.City;
 import cz.vondr.kiwi.data.Data;
 import cz.vondr.kiwi.data.Day;
@@ -14,7 +15,7 @@ import java.util.BitSet;
 
 import static java.lang.Integer.MAX_VALUE;
 
-public class SimpleBruteForceAlgorithm {
+public class SimpleBruteForceAlgorithm implements Algorithm {
 
     private final static Logger logger = LoggerFactory.getLogger(SimpleBruteForceAlgorithm.class);
     private static final int NO_CITY = -1;
@@ -28,10 +29,14 @@ public class SimpleBruteForceAlgorithm {
     private short[] actualPath;
     private BitSet visitedCities;
 
+    private volatile boolean stopped = false;
+
+    @Override
     public Solution getBestSolution() {
         return bestSolution;
     }
 
+    @Override
     public void init() {
         this.data = Salesman.data;
         numberOfCities = Salesman.cityNameMapper.getNumberOfCities();
@@ -42,6 +47,7 @@ public class SimpleBruteForceAlgorithm {
         visitedCities = new BitSet(numberOfCities);
     }
 
+    @Override
     public void start() {
         short actualDay = 0;
         short actualCity = data.startCity;
@@ -53,6 +59,9 @@ public class SimpleBruteForceAlgorithm {
     }
 
     private void doNextFlight(short actualDay, short actualCity, int actualPrice) {
+        if (stopped) {
+            return;
+        }
         testedFlights++;
         Day day = data.days[actualDay];
         City city = day.cities[actualCity];
@@ -91,4 +100,8 @@ public class SimpleBruteForceAlgorithm {
         }
     }
 
+    @Override
+    public void stop() {
+        stopped = true;
+    }
 }

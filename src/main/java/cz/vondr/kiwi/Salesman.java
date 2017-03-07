@@ -1,8 +1,10 @@
 package cz.vondr.kiwi;
 
+import cz.vondr.kiwi.algorithm.Algorithm;
 import cz.vondr.kiwi.algorithm.pq.PriorityQueueAlgorithm;
-import cz.vondr.kiwi.solutionwriter.SolutionWriter;
+import cz.vondr.kiwi.algorithm.simple.SimpleBruteForceAlgorithm;
 import cz.vondr.kiwi.data.Data;
+import cz.vondr.kiwi.solutionwriter.SolutionWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,19 +27,25 @@ public class Salesman {
     public void start() throws Exception {
         StopWatch wholeRun = new StopWatch();
 
-
-//                SimpleBruteForceAlgorithm algorithm = new SimpleBruteForceAlgorithm();
-        PriorityQueueAlgorithm algorithm = new PriorityQueueAlgorithm();
+        Algorithm algorithm;
+        if (false) {
+            algorithm = new PriorityQueueAlgorithm();
+        } else {
+            algorithm = new SimpleBruteForceAlgorithm();
+        }
 
         CountDownLatch waitForAlgorithm = new CountDownLatch(1);
         Thread solutionWriteThread = new Thread() {
             @Override
             public void run() {
                 try {
+                                          //TODO jak dlouho pocitat, nez dam vysledek?
                     waitForAlgorithm.await(29_000, MILLISECONDS);
 
+                    algorithm.stop();
+                    Solution bestSolution = algorithm.getBestSolution();
                     StopWatch writeSolutionWatch = new StopWatch();
-                    new SolutionWriter(data, algorithm.getBestSolution()).writeSolutionToSystemOutputAndLog();
+                    new SolutionWriter(data, bestSolution).writeSolutionToSystemOutputAndLog();
                     logger.info("Write solution ended. In " + writeSolutionWatch);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
@@ -59,9 +67,6 @@ public class Salesman {
         algorithm.start();
         waitForAlgorithm.countDown();
         logger.info("Algorithm ended. In " + algorithmWatch);
-
-
-
 
 
         solutionWriteThread.join();
