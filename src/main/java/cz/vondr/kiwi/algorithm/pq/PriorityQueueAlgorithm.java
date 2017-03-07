@@ -34,6 +34,8 @@ public class PriorityQueueAlgorithm implements cz.vondr.kiwi.algorithm.Algorithm
     //TODO tohle vyhodit, dobre jen pro ladeni.
     private long testedFlights = 0;
 
+    private volatile boolean algorithmStopped = false;
+
     private short numberOfCities;
 
     private Solution bestSolution = new Solution(null, MAX_VALUE);
@@ -67,6 +69,9 @@ public class PriorityQueueAlgorithm implements cz.vondr.kiwi.algorithm.Algorithm
 
         Progress p;
         while ((p = queue.poll()) != null) {
+            if (algorithmStopped) {
+                break;
+            }
 
             short actualDay = p.getDayIndex();
             short actualCity = p.getActualCity();
@@ -113,6 +118,8 @@ public class PriorityQueueAlgorithm implements cz.vondr.kiwi.algorithm.Algorithm
 
         }
 
+        queue.clear();//clear or not to clear - omg its too late today - fresh is not my name right now :)
+
 
         logger.info("Algorithm ended - TestedFlights=" + testedFlights);
 
@@ -120,7 +127,7 @@ public class PriorityQueueAlgorithm implements cz.vondr.kiwi.algorithm.Algorithm
 
     @Override
     public void stop() {
-        //TODO implement stop
+        algorithmStopped = true;
     }
 
 

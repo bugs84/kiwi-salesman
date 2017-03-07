@@ -28,7 +28,7 @@ public class Salesman {
         StopWatch wholeRun = new StopWatch();
 
         Algorithm algorithm;
-        if (false) {
+        if (true) {
             algorithm = new PriorityQueueAlgorithm();
         } else {
             algorithm = new SimpleBruteForceAlgorithm();
@@ -62,16 +62,30 @@ public class Salesman {
 
         logger.info("Input parsed. In " + dataReadWatch);
 
-        StopWatch algorithmWatch = new StopWatch();
-        algorithm.init();
-        algorithm.start();
-        waitForAlgorithm.countDown();
-        logger.info("Algorithm ended. In " + algorithmWatch);
+        Thread algorithmThread = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    StopWatch algorithmWatch = new StopWatch();
+                    algorithm.init();
+                    algorithm.start();
+                    waitForAlgorithm.countDown();
+                    logger.info("Algorithm ended. In " + algorithmWatch);
+                }catch (Throwable t) {
+                    logger.error("ALGORITHM FATAL ERROR: ", t);
+                    // Jestli se tohle roseka, tak se modlim,
+                    // ze to meziti dalo nejaky dobry, reseni, ktery ten vypisovaci thread vypise
+                    // :)
+                }
+            }
+        };
+        algorithmThread.start();
 
 
         solutionWriteThread.join();
+        algorithmThread.join();
 
-        logger.info("End. Whole run took: " + wholeRun);
+        logger.info("Total End. Whole run took: " + wholeRun);
     }
 
 
