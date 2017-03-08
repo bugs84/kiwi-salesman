@@ -103,6 +103,10 @@ public class PriorityQueueAlgorithm implements cz.vondr.kiwi.algorithm.Algorithm
                     continue;
                 }
 
+                if (nextPrice >= bestSolution.price) { // very simple throw too expensive paths TODO do it even better
+                    continue;
+                }
+
                 short[] nextPath = new short[p.path.length + 1];
                 System.arraycopy(p.path, 0, nextPath, 0, p.path.length);
                 nextPath[nextPath.length - 1] = nextCity;

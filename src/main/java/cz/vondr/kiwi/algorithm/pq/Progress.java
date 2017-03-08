@@ -16,7 +16,7 @@ public class Progress {
 
     //TODO
     //tohle by se dalo pouzit, abych si mohl do queue ulozit i rozpracovane mesta (ze se z nej letelo jen nekam a ne vsude)
-//    public short flightProcessed;
+//    public short flightsProcessed;
 //    public int nextFlightPrice;
 
     public Progress(short[] path, BitSet visitedCities, int price) {

@@ -21,5 +21,6 @@ TODO
   - potrebujeme nagenerovat/ziskat dalsi datasety
   - potrebujeme zjistit jestli je mezi  zavolanim spustitelneho souboru a poslanim na vstup nejaky cas. A od kdy presne se 30s meri?
   - potrebujeme rozjet prostredi na tom jejich docker image
+  - automaticke porovnavatko pro vyber lepsiho algoritmu
 
 
