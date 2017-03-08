@@ -51,6 +51,11 @@ public class SolutionWriter {
 //    BRQ FCO 1 40
 //    FCO NAP 2 3
     public void write(Appendable appendable) throws Exception {
+        if (solution.price == Integer.MAX_VALUE) {
+            appendable.append("NO SOLUTION FOUND :(");
+            return;
+        }
+
         short[] path = solution.path;
         short day = 0;
 
