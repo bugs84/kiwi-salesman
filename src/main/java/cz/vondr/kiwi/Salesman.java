@@ -39,7 +39,7 @@ public class Salesman {
             @Override
             public void run() {
                 try {
-                                          //TODO jak dlouho pocitat, nez dam vysledek?
+                    //TODO jak dlouho pocitat, nez dam vysledek? Kdy se presne spusti casovac?
                     waitForAlgorithm.await(29_000, MILLISECONDS);
 
                     algorithm.stop();
@@ -58,6 +58,7 @@ public class Salesman {
         logger.info("Start.");
         StopWatch dataReadWatch = new StopWatch();
         new InputParser(input, data).readInputAndFillData();
+        cityNameMapper.writeIndexMapToLog();
         new PrepareData(data).prepare();
 
         logger.info("Input parsed. In " + dataReadWatch);

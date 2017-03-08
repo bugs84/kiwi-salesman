@@ -24,6 +24,10 @@ public class PriorityQueueAlgorithm implements cz.vondr.kiwi.algorithm.Algorithm
     private static final int QUEUE_INITIAL_CAPACITY = 5000;
 
     private static final Comparator<Progress> comparator = (p1, p2) -> {
+//        if (p2.path.length < 3 || p1.path.length < 3) {
+//            return p1.path.length - p2.path.length;
+//        }
+
 //        1) delsi cesta
         int pathDiff = p2.path.length - p1.path.length;
 //        2) lepsi cena
@@ -114,8 +118,6 @@ public class PriorityQueueAlgorithm implements cz.vondr.kiwi.algorithm.Algorithm
                 nextVisitedCities.set(nextCity);
 //                logger.info("Fly from " + actualCity + " to " + nextCity);
                 addToQueue(new Progress(nextPath, nextVisitedCities, nextPrice));
-
-
 
 
             }

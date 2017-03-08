@@ -1,9 +1,15 @@
 package cz.vondr.kiwi;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class CityNameMapper {
+
+    private final static Logger logger = LoggerFactory.getLogger(CityNameMapper.class);
+
     //         <CityName, CityIndex>
     private Map<String, Short> nameMap = new HashMap<>();
     private Map<Short, String> indexMap = new HashMap<>();
@@ -24,5 +30,14 @@ public class CityNameMapper {
 
     public short getNumberOfCities() {
         return (short) indexMap.size();
+    }
+
+    public void writeIndexMapToLog() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Indexes and City name mapping:").append('\n');
+        indexMap.forEach((index, city) ->
+                sb.append(String.format("% 3d", index)).append(" : ").append(city).append('\n')
+        );
+        logger.info(sb.toString());
     }
 }
