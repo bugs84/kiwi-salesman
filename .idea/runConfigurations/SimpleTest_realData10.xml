@@ -1,0 +1,29 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="SimpleTest.realData10" type="JUnit" factoryName="JUnit" nameIsGenerated="true">
+    <log_file path="$PROJECT_DIR$/logs/log.log" checked="true" skipped="true" show_all="false" alias="log" />
+    <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+      <pattern>
+        <option name="PATTERN" value="cz.vondr.kiwi.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <module name="kiwi-salesman_test" />
+    <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+    <option name="ALTERNATIVE_JRE_PATH" />
+    <option name="PACKAGE_NAME" value="cz.vondr.kiwi" />
+    <option name="MAIN_CLASS_NAME" value="cz.vondr.kiwi.SimpleTest" />
+    <option name="METHOD_NAME" value="realData10" />
+    <option name="TEST_OBJECT" value="method" />
+    <option name="VM_PARAMETERS" value="-ea" />
+    <option name="PARAMETERS" value="" />
+    <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
+    <option name="ENV_VARIABLES" />
+    <option name="PASS_PARENT_ENVS" value="true" />
+    <option name="TEST_SEARCH_SCOPE">
+      <value defaultName="singleModule" />
+    </option>
+    <envs />
+    <patterns />
+    <method />
+  </configuration>
+</component>
