@@ -5,6 +5,7 @@ import cz.vondr.kiwi.Solution;
 import cz.vondr.kiwi.StopWatch;
 import cz.vondr.kiwi.algorithm.Algorithm;
 import cz.vondr.kiwi.data.Data;
+import cz.vondr.kiwi.solutionwriter.SolutionWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,12 +56,22 @@ public class TimeBasedAlgorithm implements Algorithm {
         short actualFinalIndex = 0;
         PQForTimeBased actualAlg = new PQForTimeBased().setBestProgress(initialProgress);
         while (actualFinalIndex < data.numberOfCities - 1) {
-            int increment = 5;
+            int increment = 8;
             actualFinalIndex += increment;
-            if (actualFinalIndex == increment) actualFinalIndex--;
+            Progress nextProgress;
+            if (actualFinalIndex == increment) {
+                actualFinalIndex--;
+                nextProgress = actualAlg.getBestProgress();
+            } else {
+                Progress bestProgress = actualAlg.getBestProgress();
+                nextProgress = createShorterProgress(bestProgress, (short) (bestProgress.getDayIndex() - (increment/2)));
+                actualFinalIndex -= increment/2;
+            }
+
+
 
             actualAlg = new PQForTimeBased()
-                    .init(actualAlg.getBestProgress(), actualFinalIndex)
+                    .init(nextProgress, actualFinalIndex)
                     .start();
 
         }
@@ -73,9 +84,15 @@ public class TimeBasedAlgorithm implements Algorithm {
                 bestProgress.price
         );
 
+        try {
+            new SolutionWriter(data, bestSolution).writeSolutionToLog();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
-    private void createShorterProgress(Progress p, short newFinalIndex) {
+    private Progress createShorterProgress(Progress p, short newFinalIndex) {
 
 
         short[] newPath = Arrays.copyOf(p.path, newFinalIndex);
@@ -87,7 +104,7 @@ public class TimeBasedAlgorithm implements Algorithm {
         }
 
 
-        new Progress(
+        return new Progress(
                 newPath,
                 newPrices,
                 newBitset,
