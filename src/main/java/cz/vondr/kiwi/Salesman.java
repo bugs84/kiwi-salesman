@@ -33,7 +33,7 @@ public class Salesman {
         StopWatch wholeRun = actualTime.start();
 
         Algorithm algorithm;
-        switch (4) {
+        switch (1) {
             case 1:
                 algorithm = new SimpleBruteForceAlgorithm();
                 break;

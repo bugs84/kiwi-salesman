@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.List;
 
 import static cz.vondr.kiwi.Salesman.cityNameMapper;
@@ -56,8 +57,6 @@ public class InputParser {
         int price = parseInt(split[3]);
 
 
-
-
         //remove nonsence flight
         if (from == data.startCity && dayIndex != 0) { //lety z pocatecniho mesta. jiny nez prvni (0) den
 //            logger.info("Nonsence Start - "+ ++nonsenceStart);
@@ -66,7 +65,7 @@ public class InputParser {
         }
 
         //TODO tohle nemusi zabrat spravne, pokud jeste neni znamy spravny pocet mest :(
-        if(to == data.startCity && dayIndex!=cityNameMapper.getNumberOfCities()-1) {
+        if (to == data.startCity && dayIndex != cityNameMapper.getNumberOfCities() - 1) {
 //            = lety do pocatecniho mesta. jiny, nez posledni den
 //            logger.info("Nonsence End - "+ ++nonsenceEnd);
             return;
@@ -76,6 +75,14 @@ public class InputParser {
         Day day = getDay(data.daysInput, dayIndex);
         City city = getCity(day.citiesInput, from);
         city.flightsInput.add(new Flight(to, price));
+        //add flight price
+        addFlightPrice(to, price);
+    }
+
+    private void addFlightPrice(short destinationTown, int price) {
+        data.cityPrices
+                .computeIfAbsent(destinationTown, val -> new ArrayList<>())
+                .add(price);
     }
 
     private Day getDay(List<Day> list, short index) {
