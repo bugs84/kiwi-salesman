@@ -16,6 +16,9 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
 public class Salesman {
     private final static Logger logger = LoggerFactory.getLogger(Salesman.class);
 
+    public static final int TOTAL_ALGORITHM_TIME = 29_000;
+    public static final StopWatch actualTime = new StopWatch();
+
     private InputStream input;
     public static Data data = new Data();
     public static CityNameMapper cityNameMapper = new CityNameMapper();
@@ -25,7 +28,7 @@ public class Salesman {
     }
 
     public void start() throws Exception {
-        StopWatch wholeRun = new StopWatch();
+        StopWatch wholeRun = actualTime.start();
 
         Algorithm algorithm;
         if (true) {
@@ -40,7 +43,7 @@ public class Salesman {
             public void run() {
                 try {
                     //TODO jak dlouho pocitat, nez dam vysledek? Kdy se presne spusti casovac?
-                    waitForAlgorithm.await(29_000, MILLISECONDS);
+                    waitForAlgorithm.await(TOTAL_ALGORITHM_TIME, MILLISECONDS);
 
                     algorithm.stop();
                     Solution bestSolution = algorithm.getBestSolution();
@@ -75,7 +78,7 @@ public class Salesman {
                 }catch (Throwable t) {
                     logger.error("ALGORITHM FATAL ERROR: ", t);
                     // Jestli se tohle roseka, tak se modlim,
-                    // ze to meziti dalo nejaky dobry, reseni, ktery ten vypisovaci thread vypise
+                    // ze to mezitim dalo nejaky dobry, reseni, ktery ten vypisovaci thread vypise
                     // :)
                 }
             }

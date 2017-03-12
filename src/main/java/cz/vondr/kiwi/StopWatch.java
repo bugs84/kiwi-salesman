@@ -16,8 +16,12 @@ public class StopWatch {
         return this;
     }
 
+    public long splitTime() {
+        return System.currentTimeMillis() - start;
+    }
+
     public long stop() {
-        result = System.currentTimeMillis() - start;
+        result = splitTime();
         return result;
     }
 

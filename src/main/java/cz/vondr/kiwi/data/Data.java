@@ -9,6 +9,8 @@ public class Data {
 
     public short startCity = -1;
 
+    public short numberOfCities;
+
 
 
 }

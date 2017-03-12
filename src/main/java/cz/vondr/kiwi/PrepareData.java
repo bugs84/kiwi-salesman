@@ -19,6 +19,9 @@ public class PrepareData {
     }
 
     void prepare() {
+        data.numberOfCities = Salesman.cityNameMapper.getNumberOfCities();
+
+
         //sort flights
         List<Day> days = data.daysInput;
         for (int dayI = 0; dayI < days.size(); dayI++) {

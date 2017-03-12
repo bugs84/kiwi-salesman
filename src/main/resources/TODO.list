@@ -8,10 +8,8 @@ Kdyz by tam nato byl nekde cas. Tak zahrat JVM!!!!!!!!!!  To by sakrys fakt pomo
 
 na ostry run se da vyhazet logger i z gradle. uplne vyhodit zavislost (udelal bych to vedle v branchi)
 
-//TODO - zalogovat cityMapper
 //TODO - nedavat do dat nesmyslne lety
-//     = lety z pocatecniho mesta. jiny nez prvni (0) den
-//     = lety do pocatecniho mesta. jiny, nez posledni den
+//     = lety do pocatecniho mesta. jiny, nez posledni den = HOTOVO ale neni to stopro (nejake mohou zustat)
 
 TODO - lepsi zahazovani cest, ktere uz nebudou levnejsi.
       (Mozna - mit nejlevnejsi lety a pronasobit to s bitsetem)
