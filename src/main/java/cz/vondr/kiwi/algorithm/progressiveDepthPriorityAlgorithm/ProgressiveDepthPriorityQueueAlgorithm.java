@@ -87,6 +87,16 @@ public class ProgressiveDepthPriorityQueueAlgorithm implements Algorithm {
     private Queue<Progress> queue = new PriorityQueue<>(QUEUE_INITIAL_CAPACITY, comparator);
 
     private void addToQueue(Progress p) {
+        if(actualMaxDayIndex!=lastMaxDayIndex) {
+            //reorderQueue
+            lastMaxDayIndex = actualMaxDayIndex;
+                               //??? not optimal
+            PriorityQueue<Progress> newQueue = new PriorityQueue<>((queue.size()+1) * 2, comparator);
+            newQueue.addAll(queue);
+            queue = newQueue;
+        }
+
+
         queue.add(p);
         testedFlights++;
     }
@@ -103,15 +113,19 @@ public class ProgressiveDepthPriorityQueueAlgorithm implements Algorithm {
         numberOfCities = data.numberOfCities;
     }
 
+    short lastMaxDayIndex = 0;
+
     @Override
     public void start() {
-        actualMaxDayIndex=5;
+        //konstanty optimalizovany pro 100 data set
+        actualMaxDayIndex=1;
+        lastMaxDayIndex = actualMaxDayIndex;
         new Timer("actualMaxDayIndexIncreasor").scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                actualMaxDayIndex++;
+                actualMaxDayIndex += 1;
             }
-        }, 0L, 100L);
+        }, 0L, 200L);
 
         startInternal();
     }
