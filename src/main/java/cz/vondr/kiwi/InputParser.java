@@ -42,6 +42,9 @@ public class InputParser {
         data.startCity = cityNameMapper.nameToIndex(startTown);
     }
 
+//    int nonsenceStart=0;
+//    int nonsenceEnd=0;
+
     private void parseLine(String line) {
         //TODO do not use regexp
         String[] split = line.split(" ");
@@ -51,6 +54,23 @@ public class InputParser {
         short to = cityNameMapper.nameToIndex(split[1]);
         short dayIndex = parseShort(split[2]);
         int price = parseInt(split[3]);
+
+
+
+
+        //remove nonsence flight
+        if (from == data.startCity && dayIndex != 0) { //lety z pocatecniho mesta. jiny nez prvni (0) den
+//            logger.info("Nonsence Start - "+ ++nonsenceStart);
+
+            return;
+        }
+
+        //TODO tohle nemusi zabrat spravne, pokud jeste neni znamy spravny pocet mest :(
+        if(to == data.startCity && dayIndex!=cityNameMapper.getNumberOfCities()-1) {
+//            = lety do pocatecniho mesta. jiny, nez posledni den
+//            logger.info("Nonsence End - "+ ++nonsenceEnd);
+            return;
+        }
 
         //add flight
         Day day = getDay(data.daysInput, dayIndex);
