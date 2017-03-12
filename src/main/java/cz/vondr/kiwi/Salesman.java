@@ -2,6 +2,7 @@ package cz.vondr.kiwi;
 
 import cz.vondr.kiwi.algorithm.Algorithm;
 import cz.vondr.kiwi.algorithm.pq.PriorityQueueAlgorithm;
+import cz.vondr.kiwi.algorithm.progressiveDepthPriorityAlgorithm.ProgressiveDepthPriorityQueueAlgorithm;
 import cz.vondr.kiwi.algorithm.simple.SimpleBruteForceAlgorithm;
 import cz.vondr.kiwi.algorithm.time_based.TimeBasedAlgorithm;
 import cz.vondr.kiwi.data.Data;
@@ -32,7 +33,7 @@ public class Salesman {
         StopWatch wholeRun = actualTime.start();
 
         Algorithm algorithm;
-        switch (3) {
+        switch (4) {
             case 1:
                 algorithm = new SimpleBruteForceAlgorithm();
                 break;
@@ -41,6 +42,9 @@ public class Salesman {
                 break;
             case 3:
                 algorithm = new TimeBasedAlgorithm();
+                break;
+            case 4:
+                algorithm = new ProgressiveDepthPriorityQueueAlgorithm();
                 break;
             default:
                 throw new IllegalStateException();

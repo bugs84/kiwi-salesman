@@ -39,6 +39,7 @@ public class PQForTimeBased {
             return pathDiff;
         }
 
+        //TODO tohle neni moc supr, tady je potreba brat v potaz taky pristi cenu
         int flightsProcessedDiff = p1.flightsProcessed - p2.flightsProcessed;
         if (flightsProcessedDiff != 0) {
             return flightsProcessedDiff;
