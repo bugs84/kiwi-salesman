@@ -5,10 +5,17 @@ import cz.vondr.kiwi.Solution;
 import cz.vondr.kiwi.StopWatch;
 import cz.vondr.kiwi.algorithm.Algorithm;
 import cz.vondr.kiwi.data.Data;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Arrays;
+import java.util.BitSet;
 
 import static java.lang.Integer.MAX_VALUE;
 
 public class TimeBasedAlgorithm implements Algorithm {
+
+    private final static Logger logger = LoggerFactory.getLogger(TimeBasedAlgorithm.class);
 
     private Solution bestSolution = new Solution(null, MAX_VALUE);
 
@@ -20,7 +27,7 @@ public class TimeBasedAlgorithm implements Algorithm {
 
     @Override
     public Solution getBestSolution() {
-        throw new UnsupportedOperationException("Not implemented");
+        return bestSolution;
     }
 
     @Override
@@ -33,8 +40,61 @@ public class TimeBasedAlgorithm implements Algorithm {
         computeAlgorithmTimes();
 
 
+        Progress initialProgress = new Progress(new short[0], new int[0], new BitSet(data.numberOfCities), 0);
+//        PQForTimeBased al1 = new PQForTimeBased()
+//                .init(initialProgress, (short) 5)
+//                .start();
+//
+//
+//        PQForTimeBased al2 = new PQForTimeBased()
+//                .init(al1.getBestProgress(), (short) 9)
+//                .start();
+//
+//        Progress bestProgress = al2.getBestProgress();
+
+        short actualFinalIndex = 0;
+        PQForTimeBased actualAlg = new PQForTimeBased().setBestProgress(initialProgress);
+        while (actualFinalIndex < data.numberOfCities - 1) {
+            int increment = 5;
+            actualFinalIndex += increment;
+            if (actualFinalIndex == increment) actualFinalIndex--;
+
+            actualAlg = new PQForTimeBased()
+                    .init(actualAlg.getBestProgress(), actualFinalIndex)
+                    .start();
+
+        }
+
+
+        Progress bestProgress = actualAlg.getBestProgress();
+
+        bestSolution = new Solution(
+                Arrays.copyOf(bestProgress.path, bestProgress.path.length - 1),
+                bestProgress.price
+        );
 
     }
+
+    private void createShorterProgress(Progress p, short newFinalIndex) {
+
+
+        short[] newPath = Arrays.copyOf(p.path, newFinalIndex);
+        int[] newPrices = Arrays.copyOf(p.prices, newFinalIndex);
+
+        BitSet newBitset = new BitSet();
+        for (int i = 0; i < newPath.length; i++) {
+            newBitset.set(newPath[i]);
+        }
+
+
+        new Progress(
+                newPath,
+                newPrices,
+                newBitset,
+                newPrices[newPrices.length - 1]
+        );
+    }
+
 
     private void computeAlgorithmTimes() {
         algorithmActualTime = new StopWatch();
@@ -46,7 +106,7 @@ public class TimeBasedAlgorithm implements Algorithm {
 
     @Override
     public void stop() {
-        throw new UnsupportedOperationException("Not implemented");
+        logger.error("STOP IS NOT IMPLEMENTED HERE!!!!!!!!!!!!!");
     }
 
 

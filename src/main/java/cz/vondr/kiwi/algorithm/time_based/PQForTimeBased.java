@@ -1,10 +1,6 @@
 package cz.vondr.kiwi.algorithm.time_based;
 
 import cz.vondr.kiwi.Salesman;
-import cz.vondr.kiwi.Solution;
-import cz.vondr.kiwi.algorithm.Algorithm;
-import cz.vondr.kiwi.algorithm.pq.Progress;
-import cz.vondr.kiwi.algorithm.simple.SimpleBruteForceAlgorithm;
 import cz.vondr.kiwi.data.City;
 import cz.vondr.kiwi.data.Data;
 import cz.vondr.kiwi.data.Day;
@@ -20,8 +16,8 @@ import java.util.Queue;
 
 import static java.lang.Integer.MAX_VALUE;
 
-public class PQForTimeBased implements Algorithm {
-    private final static Logger logger = LoggerFactory.getLogger(SimpleBruteForceAlgorithm.class);
+public class PQForTimeBased {
+    private final static Logger logger = LoggerFactory.getLogger(PQForTimeBased.class);
 
     private static final int QUEUE_INITIAL_CAPACITY = 5000;
 
@@ -61,7 +57,10 @@ public class PQForTimeBased implements Algorithm {
 
     private short numberOfCities;
 
-    private Solution bestSolution = new Solution(null, MAX_VALUE);
+    private short finalDayIndex;
+
+    //    private Solution bestSolution = new Solution(null, MAX_VALUE);
+    private Progress bestProgress = new Progress(null, null, null, MAX_VALUE);
 
     private Data data;
 
@@ -73,24 +72,29 @@ public class PQForTimeBased implements Algorithm {
         testedFlights++;
     }
 
-    @Override
-    public Solution getBestSolution() {
-        return bestSolution;
+    public Progress getBestProgress() {
+        return bestProgress;
     }
 
+    public PQForTimeBased setBestProgress(Progress bestProgress) {
+        this.bestProgress = bestProgress;
+        return this;
+    }
 
-    @Override
-    public void init() {
+    public PQForTimeBased init(Progress initialProgress, short finalDayIndex) {
         this.data = Salesman.data;
         numberOfCities = data.numberOfCities;
+
+        addToQueue(initialProgress);
+        this.finalDayIndex = finalDayIndex;
+        return this;
     }
 
-    @Override
-    public void start() {
-        //Initial state
-        Progress p1 = new Progress(new short[0], new BitSet(numberOfCities), 0);
-//        p1.flightsProcessed = 1;
-        addToQueue(p1);
+
+    public PQForTimeBased start() {
+//        //Initial state
+//        Progress p1 = new Progress(new short[0], new BitSet(numberOfCities), 0);
+//        addToQueue(p1);
 
         Progress p;
         while ((p = queue.poll()) != null) {
@@ -121,32 +125,27 @@ public class PQForTimeBased implements Algorithm {
                 continue;
             }
 
-//            short nextDay = (short) (actualDay + 1);
             int nextPrice = p.price + flight.price;
 
-            if (actualDay >= numberOfCities - 1) {
-                if (nextCity == data.startCity) {
-                    if (nextPrice < bestSolution.price) {
+            if (actualDay >= finalDayIndex) {
+//                if (nextCity == data.startCity) {
+                if (nextPrice < bestProgress.price) {
 //                            short[] pathCopy = Arrays.copyOf(actualPath, actualPath.length);
-                        bestSolution = new Solution(p.path, nextPrice);
-                        logger.info("New Best solution found. Price = " + nextPrice + ", path=" + Arrays.toString(bestSolution.path) + ", testedFlights=" + testedFlights);
-                    }
-                    //                    logger.info("Solution found. Price = " + nextPrice + ", path=" + Arrays.toString(actualPath) + ", testedFlights="+testedFlights);
+                    bestProgress = createNextProgress(p, nextCity, nextPrice);
+                    logger.info("New Best progress found. Price = " + nextPrice + ", path=" + Arrays.toString(bestProgress.path) + ", testedFlights=" + testedFlights);
                 }
+                //                    logger.info("Solution found. Price = " + nextPrice + ", path=" + Arrays.toString(actualPath) + ", testedFlights="+testedFlights);
+//                }
                 continue;
             }
 
-            if (nextPrice >= bestSolution.price) { // very simple throw too expensive paths TODO do it even better
+            if (nextPrice >= bestProgress.price) { // very simple throw too expensive paths TODO do it even better
                 continue;
             }
 
-            short[] nextPath = new short[p.path.length + 1];
-            System.arraycopy(p.path, 0, nextPath, 0, p.path.length);
-            nextPath[nextPath.length - 1] = nextCity;
-            BitSet nextVisitedCities = (BitSet) p.visitedCities.clone();
-            nextVisitedCities.set(nextCity);
+            Progress nextProgress = createNextProgress(p, nextCity, nextPrice);
 //                logger.info("Fly from " + actualCity + " to " + nextCity);
-            addToQueue(new Progress(nextPath, nextVisitedCities, nextPrice));
+            addToQueue(nextProgress);
 
 
         }
@@ -156,9 +155,22 @@ public class PQForTimeBased implements Algorithm {
 
         logger.info("Algorithm ended - TestedFlights=" + testedFlights);
 
+        return this;
     }
 
-    @Override
+    private Progress createNextProgress(Progress p, short nextCity, int nextPrice) {
+        short[] nextPath = new short[p.path.length + 1];
+        System.arraycopy(p.path, 0, nextPath, 0, p.path.length);
+        nextPath[nextPath.length - 1] = nextCity;
+        BitSet nextVisitedCities = (BitSet) p.visitedCities.clone();
+        nextVisitedCities.set(nextCity);
+
+        int[] nextPrices = new int[p.prices.length + 1];
+        System.arraycopy(p.prices, 0, nextPrices, 0, p.prices.length);
+        nextPrices[nextPrices.length - 1] = nextPrice;
+        return new Progress(nextPath, nextPrices, nextVisitedCities, nextPrice);
+    }
+
     public void stop() {
         algorithmStopped = true;
     }

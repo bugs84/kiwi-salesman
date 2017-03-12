@@ -3,7 +3,6 @@ package cz.vondr.kiwi.algorithm.pq;
 import cz.vondr.kiwi.Salesman;
 import cz.vondr.kiwi.Solution;
 import cz.vondr.kiwi.algorithm.Algorithm;
-import cz.vondr.kiwi.algorithm.simple.SimpleBruteForceAlgorithm;
 import cz.vondr.kiwi.data.City;
 import cz.vondr.kiwi.data.Data;
 import cz.vondr.kiwi.data.Day;
@@ -20,7 +19,7 @@ import java.util.Queue;
 import static java.lang.Integer.MAX_VALUE;
 
 public class PriorityQueueAlgorithm implements Algorithm {
-    private final static Logger logger = LoggerFactory.getLogger(SimpleBruteForceAlgorithm.class);
+    private final static Logger logger = LoggerFactory.getLogger(PriorityQueueAlgorithm.class);
 
     private static final int QUEUE_INITIAL_CAPACITY = 5000;
 

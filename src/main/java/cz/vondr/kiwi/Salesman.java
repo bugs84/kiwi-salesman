@@ -3,6 +3,7 @@ package cz.vondr.kiwi;
 import cz.vondr.kiwi.algorithm.Algorithm;
 import cz.vondr.kiwi.algorithm.pq.PriorityQueueAlgorithm;
 import cz.vondr.kiwi.algorithm.simple.SimpleBruteForceAlgorithm;
+import cz.vondr.kiwi.algorithm.time_based.TimeBasedAlgorithm;
 import cz.vondr.kiwi.data.Data;
 import cz.vondr.kiwi.solutionwriter.SolutionWriter;
 import org.slf4j.Logger;
@@ -31,10 +32,18 @@ public class Salesman {
         StopWatch wholeRun = actualTime.start();
 
         Algorithm algorithm;
-        if (true) {
-            algorithm = new PriorityQueueAlgorithm();
-        } else {
-            algorithm = new SimpleBruteForceAlgorithm();
+        switch (3) {
+            case 1:
+                algorithm = new SimpleBruteForceAlgorithm();
+                break;
+            case 2:
+                algorithm = new PriorityQueueAlgorithm();
+                break;
+            case 3:
+                algorithm = new TimeBasedAlgorithm();
+                break;
+            default:
+                throw new IllegalStateException();
         }
 
         CountDownLatch waitForAlgorithm = new CountDownLatch(1);
@@ -75,7 +84,7 @@ public class Salesman {
                     algorithm.start();
                     waitForAlgorithm.countDown();
                     logger.info("Algorithm ended. In " + algorithmWatch);
-                }catch (Throwable t) {
+                } catch (Throwable t) {
                     logger.error("ALGORITHM FATAL ERROR: ", t);
                     // Jestli se tohle roseka, tak se modlim,
                     // ze to mezitim dalo nejaky dobry, reseni, ktery ten vypisovaci thread vypise
