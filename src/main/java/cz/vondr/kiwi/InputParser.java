@@ -32,6 +32,13 @@ public class InputParser {
         readFirstLineWithStartTown();
         logger.info("First town was read.");
         //TODO DO NOT READ WHOLE LINE
+
+        //TODO
+        // 2.4s - input.readLine()
+        // 1.2s - char[] chars = new char[8024];   input.read(chars)!=-1
+
+//        char[] chars = new char[8024];
+//        while (input.read(chars)!=-1) {
         while ((line = input.readLine()) != null) {
             parseLine(line);
         }

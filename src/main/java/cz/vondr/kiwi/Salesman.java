@@ -33,7 +33,7 @@ public class Salesman {
         StopWatch wholeRun = actualTime.start();
 
         Algorithm algorithm;
-        switch (4) {
+        switch (1) {
             case 1:
                 algorithm = new SimpleBruteForceAlgorithm();
                 break;
@@ -59,6 +59,7 @@ public class Salesman {
                     waitForAlgorithm.await(TOTAL_ALGORITHM_TIME, MILLISECONDS);
 
                     algorithm.stop();
+                    logger.info("Algorithm stop was called.");
                     Solution bestSolution = algorithm.getBestSolution();
                     StopWatch writeSolutionWatch = new StopWatch();
                     new SolutionWriter(data, bestSolution).writeSolutionToSystemOutputAndLog();
