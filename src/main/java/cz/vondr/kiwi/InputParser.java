@@ -30,11 +30,12 @@ public class InputParser {
     public void readInputAndFillData() throws Exception {
         String line = null;
         readFirstLineWithStartTown();
+        logger.info("First town was read.");
         //TODO DO NOT READ WHOLE LINE
         while ((line = input.readLine()) != null) {
             parseLine(line);
         }
-
+        logger.info("Last town was read.");
     }
 
     private void readFirstLineWithStartTown() throws Exception {

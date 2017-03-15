@@ -105,8 +105,8 @@ public class Salesman {
         logger.info("Total End. Whole run took: " + wholeRun);
     }
 
-    public static void main(String[] args) {
-        new Salesman(System.in);
+    public static void main(String[] args) throws Exception {
+        new Salesman(System.in).start();
     }
 
 }
