@@ -105,5 +105,8 @@ public class Salesman {
         logger.info("Total End. Whole run took: " + wholeRun);
     }
 
+    public static void main(String[] args) {
+        new Salesman(System.in);
+    }
 
 }

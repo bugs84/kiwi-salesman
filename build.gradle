@@ -10,6 +10,25 @@ repositories {
     mavenCentral()
 }
 
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.4'
+    }
+}
+
+apply plugin: 'com.github.johnrengelman.shadow'
+
+jar {
+  manifest {
+    attributes(
+      'Main-Class': 'cz.vondr.kiwi.Salesman'
+    )
+  }
+}
+
 dependencies {
     compile "org.slf4j:slf4j-api:1.7.7"
     compile "ch.qos.logback:logback-classic:1.1.2"
