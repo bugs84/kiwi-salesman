@@ -91,6 +91,9 @@ public class SimpleOptimalizedBruteForceAlgorithm implements Algorithm {
                 continue;
             }
 
+            if (nextPrice >= bestSolution.price) { // very simple throw too expensive paths TODO do it even better
+                continue;
+            }
 
             actualPath[actualDay] = nextCity;
             visitedCities.set(nextCity, true);
