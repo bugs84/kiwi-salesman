@@ -19,6 +19,7 @@ public class InputParser {
 
     private BufferedInputStream input;
     private Data data;
+    private byte[] cityBytes = new byte[3];
 
     public InputParser(InputStream input, Data data) {
         this.input = new BufferedInputStream(input);
@@ -26,69 +27,31 @@ public class InputParser {
     }
 
     public void readInputAndFillData() throws Exception {
-        String line = null;
         readFirstLineWithStartTown();
         logger.info("First town was read.");
-        //TODO DO NOT READ WHOLE LINE
 
-        //TODO
-        // 2.4s - input.readLine()
-        // 1.2s - char[] chars = new char[8024];   input.read(chars)!=-1
-
-//        char[] chars = new char[8024];
-//        while (input.read(chars)!=-1) {
-
-
-        //jen cteni buffer = new bytes[8*1024] = 662ms
-        // 9.5s - jen parsovani bez vytvareni objektu
-        //19.2s - i s vytvarenim objektu
-        //po CityName objektu 16.9
-        while(readAndParseLine()) {
+        while (readAndParseLine()) {
         }
 
-        // 8.4s - jen parsovani bez vytvareni objektu
-        // 17.3s- i s vytvarenim objektu
-//        while ((line = input.readLine()) != null) {
-//            parseLine(line);
-//        }
         logger.info("Last town was read.");
-
-        //cteni 2s  parsovani 7s   vytvareni objektu 7s  celkem 18s
     }
-
 
     private void readFirstLineWithStartTown() throws Exception {
         input.read(cityBytes);
 
         CityName startTown = new CityName(cityBytes);
         data.startCity = cityNameMapper.nameToIndex(startTown);
-        input.read();//eof
+        input.read();//eol
     }
 
-    private byte[] cityBytes = new byte[3];
-
     private boolean readAndParseLine() throws IOException {
-//        byte[] buf = new byte[8 * 1024];
-//        while (input.read(buf) >= 0 ) {
-//
-//        }
-//        if(true) return false;
-
-
         if (input.read(cityBytes) == -1) {
             return false; //end of stream
         }
-
-//        byte[] city1 = Arrays.copyOf(cityBytes, cityBytes.length);
         short from = cityNameMapper.nameToIndex(new CityName(cityBytes));
-//        String from = new String(cityBytes, ISO_8859_1);
-//        short from = cityNameMapper.nameToIndex(new String(cityBytes, ISO_8859_1));
         input.read();//space
         input.read(cityBytes);
-//        byte[] city2 = Arrays.copyOf(cityBytes, cityBytes.length);
         short to = cityNameMapper.nameToIndex(new CityName(cityBytes));
-//        String to = new String(cityBytes, ISO_8859_1);
-//        short to = cityNameMapper.nameToIndex(new String(cityBytes, ISO_8859_1));
         input.read();//space
         int charInt;
         short dayIndex = 0;
@@ -114,23 +77,7 @@ public class InputParser {
         addFlightToData(from, to, dayIndex, price);
 
         return charInt != -49;
-
-
     }
-
-//    private void parseLine(String line) {
-//        //TODO do not use regexp
-//        String[] split = line.split(" ");
-//
-//        //parse line
-//        short from = cityNameMapper.nameToIndex(split[0]);
-//        short to = cityNameMapper.nameToIndex(split[1]);
-//        short dayIndex = parseShort(split[2]);
-//        int price = parseInt(split[3]);
-//        addFlightToData(from, to, dayIndex, price);
-//
-//
-//    }
 
     private void addFlightToData(short from, short to, short dayIndex, int price) {
         //remove nonsence flight
@@ -141,7 +88,7 @@ public class InputParser {
         }
 
         //TODO tohle nemusi zabrat spravne, pokud jeste neni znamy spravny pocet mest :(
-        if(to == data.startCity && dayIndex!=cityNameMapper.getNumberOfCities()-1) {
+        if (to == data.startCity && dayIndex != cityNameMapper.getNumberOfCities() - 1) {
 //            = lety do pocatecniho mesta. jiny, nez posledni den
 //            logger.info("Nonsence End - "+ ++nonsenceEnd);
             return;
