@@ -23,6 +23,7 @@ Mam tam predpoklad, ze data jsou serazeny po dnech.  Ale je to pravda? jsou ty d
 Solution writer ma predpoklad, ze jeden den neni mezi dvema mesty vic letu.  Je to pravda? plati to?
 
 
+
 //TODO BARGAIN SORT ALGORITHM =
 // = Seradit lety ne od nejlevnejsiho. Ale podle toho kolikátá nejlevnější cena. To je pro dané město
 //    -takze seřadit lety podle toho, jak vyhodne jak vyhodna cena je to pro dane mesto.
