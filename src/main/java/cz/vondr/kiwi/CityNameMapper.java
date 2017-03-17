@@ -11,10 +11,10 @@ public class CityNameMapper {
     private final static Logger logger = LoggerFactory.getLogger(CityNameMapper.class);
 
     //         <CityName, CityIndex>
-    private Map<String, Short> nameMap = new HashMap<>();
-    private Map<Short, String> indexMap = new HashMap<>();
+    private Map<CityName, Short> nameMap = new HashMap<>();
+    private Map<Short, CityName> indexMap = new HashMap<>();
 
-    public short nameToIndex(String cityName) {
+    public short nameToIndex(CityName cityName) {
         Short index = nameMap.get(cityName);
         if (index == null) {
             index = (short) (nameMap.size());
@@ -24,7 +24,7 @@ public class CityNameMapper {
         return index;
     }
 
-    public String indexToName(short index) {
+    public CityName indexToName(short index) {
         return indexMap.get(index);
     }
 

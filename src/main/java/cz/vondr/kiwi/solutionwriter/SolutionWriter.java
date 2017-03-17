@@ -76,9 +76,9 @@ public class SolutionWriter {
 
     private void appendOneFlight(Appendable appendable, short fromIndex, short toIndex, short dayIndex) throws Exception {
         appendable
-                .append(cityNameMapper.indexToName(fromIndex))
+                .append(cityNameMapper.indexToName(fromIndex).toString())
                 .append(' ')
-                .append(cityNameMapper.indexToName(toIndex))
+                .append(cityNameMapper.indexToName(toIndex).toString())
                 .append(' ')
                 .append(Short.toString(dayIndex))
                 .append(' ')

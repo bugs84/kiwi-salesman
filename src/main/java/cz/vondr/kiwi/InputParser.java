@@ -13,9 +13,6 @@ import java.io.InputStream;
 import java.util.List;
 
 import static cz.vondr.kiwi.Salesman.cityNameMapper;
-import static java.lang.Integer.parseInt;
-import static java.lang.Short.parseShort;
-import static java.nio.charset.StandardCharsets.ISO_8859_1;
 
 public class InputParser {
     private final static Logger logger = LoggerFactory.getLogger(InputParser.class);
@@ -42,8 +39,10 @@ public class InputParser {
 //        while (input.read(chars)!=-1) {
 
 
+        //jen cteni buffer = new bytes[8*1024] = 662ms
         // 9.5s - jen parsovani bez vytvareni objektu
         //19.2s - i s vytvarenim objektu
+        //po CityName objektu 16.9
         while(readAndParseLine()) {
         }
 
@@ -61,7 +60,7 @@ public class InputParser {
     private void readFirstLineWithStartTown() throws Exception {
         input.read(cityBytes);
 
-        String startTown = new String(cityBytes, ISO_8859_1);
+        CityName startTown = new CityName(cityBytes);
         data.startCity = cityNameMapper.nameToIndex(startTown);
         input.read();//eof
     }
@@ -69,17 +68,27 @@ public class InputParser {
     private byte[] cityBytes = new byte[3];
 
     private boolean readAndParseLine() throws IOException {
+//        byte[] buf = new byte[8 * 1024];
+//        while (input.read(buf) >= 0 ) {
+//
+//        }
+//        if(true) return false;
 
 
         if (input.read(cityBytes) == -1) {
             return false; //end of stream
         }
 
-
-        short from = cityNameMapper.nameToIndex(new String(cityBytes, ISO_8859_1));
+//        byte[] city1 = Arrays.copyOf(cityBytes, cityBytes.length);
+        short from = cityNameMapper.nameToIndex(new CityName(cityBytes));
+//        String from = new String(cityBytes, ISO_8859_1);
+//        short from = cityNameMapper.nameToIndex(new String(cityBytes, ISO_8859_1));
         input.read();//space
         input.read(cityBytes);
-        short to = cityNameMapper.nameToIndex(new String(cityBytes, ISO_8859_1));
+//        byte[] city2 = Arrays.copyOf(cityBytes, cityBytes.length);
+        short to = cityNameMapper.nameToIndex(new CityName(cityBytes));
+//        String to = new String(cityBytes, ISO_8859_1);
+//        short to = cityNameMapper.nameToIndex(new String(cityBytes, ISO_8859_1));
         input.read();//space
         int charInt;
         short dayIndex = 0;
@@ -109,19 +118,19 @@ public class InputParser {
 
     }
 
-    private void parseLine(String line) {
-        //TODO do not use regexp
-        String[] split = line.split(" ");
-
-        //parse line
-        short from = cityNameMapper.nameToIndex(split[0]);
-        short to = cityNameMapper.nameToIndex(split[1]);
-        short dayIndex = parseShort(split[2]);
-        int price = parseInt(split[3]);
-        addFlightToData(from, to, dayIndex, price);
-
-
-    }
+//    private void parseLine(String line) {
+//        //TODO do not use regexp
+//        String[] split = line.split(" ");
+//
+//        //parse line
+//        short from = cityNameMapper.nameToIndex(split[0]);
+//        short to = cityNameMapper.nameToIndex(split[1]);
+//        short dayIndex = parseShort(split[2]);
+//        int price = parseInt(split[3]);
+//        addFlightToData(from, to, dayIndex, price);
+//
+//
+//    }
 
     private void addFlightToData(short from, short to, short dayIndex, int price) {
         //remove nonsence flight
