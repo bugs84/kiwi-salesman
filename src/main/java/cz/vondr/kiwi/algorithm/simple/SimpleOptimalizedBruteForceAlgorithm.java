@@ -15,9 +15,9 @@ import java.util.BitSet;
 
 import static java.lang.Integer.MAX_VALUE;
 
-public class SimpleBruteForceAlgorithm implements Algorithm {
+public class SimpleOptimalizedBruteForceAlgorithm implements Algorithm {
 
-    private final static Logger logger = LoggerFactory.getLogger(SimpleBruteForceAlgorithm.class);
+    private final static Logger logger = LoggerFactory.getLogger(SimpleOptimalizedBruteForceAlgorithm.class);
     private static final int NO_CITY = -1;
 
     private Solution bestSolution = new Solution(null, MAX_VALUE);
@@ -90,6 +90,7 @@ public class SimpleBruteForceAlgorithm implements Algorithm {
                 }
                 continue;
             }
+
 
             actualPath[actualDay] = nextCity;
             visitedCities.set(nextCity, true);
