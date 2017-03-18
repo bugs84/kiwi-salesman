@@ -108,6 +108,14 @@ public class Salesman {
         algorithmThread.start();
 
 
+        //TODO MIKY - Muze si hrat s daty - uncomment this
+//        Thread mikyThread = new Thread(() -> {
+//            Data data = Salesman.data;
+//        });
+//        mikyThread.start();
+
+
+
         solutionWriteThread.join();
         algorithmThread.join();
 
