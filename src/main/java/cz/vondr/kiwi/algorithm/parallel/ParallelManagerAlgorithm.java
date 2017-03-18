@@ -4,20 +4,14 @@ import cz.vondr.kiwi.Salesman;
 import cz.vondr.kiwi.Solution;
 import cz.vondr.kiwi.algorithm.Algorithm;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
 import static cz.vondr.kiwi.algorithm.parallel.BruteForceWithInitState.NO_CITY;
 
 public class ParallelManagerAlgorithm implements Algorithm {
 
-    private BestSolution bestSolution = new BestSolution();
+    private BestSolutionHolder bestSolutionHolder = new BestSolutionHolder();
 
-
-    @Override
     public Solution getBestSolution() {
-        return bestSolution.getBestSolution();
+        return bestSolutionHolder.get();
     }
 
     @Override
@@ -28,7 +22,7 @@ public class ParallelManagerAlgorithm implements Algorithm {
     @Override
     public void start() throws Exception {
 
-        BruteForceWithInitState bruteForceWithInitState = new BruteForceWithInitState();
+        BruteForceWithInitState bruteForceWithInitState = new BruteForceWithInitState(bestSolutionHolder);
 
         Thread algorithmThread = new Thread(() -> {
 
@@ -53,14 +47,8 @@ public class ParallelManagerAlgorithm implements Algorithm {
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-            bestSolution.setBestSolution(bruteForceWithInitState.getBestSolution());
         });
         algorithmThread.start();
-
-        ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-        executor.scheduleAtFixedRate(() -> {
-            bestSolution.setBestSolution(bruteForceWithInitState.getBestSolution());
-        }, 100, 500, TimeUnit.MILLISECONDS);
 
         algorithmThread.join();
     }

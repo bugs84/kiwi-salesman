@@ -12,14 +12,12 @@ import org.slf4j.LoggerFactory;
 import java.util.Arrays;
 import java.util.BitSet;
 
-import static java.lang.Integer.MAX_VALUE;
-
 public class BruteForceWithInitState {
 
     private final static Logger logger = LoggerFactory.getLogger(BruteForceWithInitState.class);
     public static final int NO_CITY = -1;
 
-    private Solution bestSolution = new Solution(null, MAX_VALUE);
+    private BestSolutionHolder bestSolutionHolder;
 
     private Data data;
 
@@ -36,9 +34,8 @@ public class BruteForceWithInitState {
 
     private volatile boolean stopped = false;
 
-    //    @Override
-    public Solution getBestSolution() {
-        return bestSolution;
+    public BruteForceWithInitState(BestSolutionHolder bestSolutionHolder) {
+        this.bestSolutionHolder = bestSolutionHolder;
     }
 
     /**
@@ -118,9 +115,11 @@ public class BruteForceWithInitState {
 
             if (actualDay >= numberOfCities - 1) {
                 if (nextCity == data.startCity) {
+                    Solution bestSolution = this.bestSolutionHolder.get();
                     if (nextPrice < bestSolution.price) {
                         short[] pathCopy = Arrays.copyOf(actualPath, actualPath.length);
                         bestSolution = new Solution(pathCopy, nextPrice);
+                        this.bestSolutionHolder.set(bestSolution);
                         logger.info("New Best solution found. Price = " + nextPrice + ", path=" + Arrays.toString(pathCopy) + ", testedFlights=" + testedFlights);
 //                        new SolutionWriter(data, bestSolution).writeSolutionToLog();
                     }
@@ -129,7 +128,7 @@ public class BruteForceWithInitState {
                 continue;
             }
 
-            if (nextPrice >= bestSolution.price) { // very simple throw too expensive paths TODO do it even better
+            if (nextPrice >= bestSolutionHolder.get().price) { // very simple throw too expensive paths TODO do it even better
                 continue;
             }
 
