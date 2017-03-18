@@ -65,8 +65,8 @@ public class Salesman {
                 try {
                     //TODO jak dlouho pocitat, nez dam vysledek? Kdy se presne spusti casovac?
                     waitForAlgorithm.await(TOTAL_ALGORITHM_TIME, MILLISECONDS);
+                    new Thread(algorithm::stop).start();//stop algorithm in new background thread
 
-                    algorithm.stop();
                     logger.info("Algorithm stop was called.");
                     Solution bestSolution = algorithm.getBestSolution();
                     StopWatch writeSolutionWatch = new StopWatch();

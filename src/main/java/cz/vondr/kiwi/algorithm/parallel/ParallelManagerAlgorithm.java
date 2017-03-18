@@ -3,6 +3,9 @@ package cz.vondr.kiwi.algorithm.parallel;
 import cz.vondr.kiwi.Salesman;
 import cz.vondr.kiwi.Solution;
 import cz.vondr.kiwi.algorithm.Algorithm;
+import cz.vondr.kiwi.data.City;
+import cz.vondr.kiwi.data.Day;
+import cz.vondr.kiwi.data.Flight;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +20,7 @@ public class ParallelManagerAlgorithm implements Algorithm {
 
     private BestSolutionHolder bestSolutionHolder = new BestSolutionHolder();
 
-    private final List<BruteForceWithInitState> allAlgorithms = synchronizedList(new ArrayList<>());
+    private final List<BruteForceWithInitState> activeOrFinishedAlgorithm = synchronizedList(new ArrayList<>());
 
     private final ExecutorService threadPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
@@ -33,17 +36,20 @@ public class ParallelManagerAlgorithm implements Algorithm {
     @Override
     public void start() throws Exception {
 
-        Runnable algorithmRunnable = () -> {
-            BruteForceWithInitState bruteForceWithInitState = new BruteForceWithInitState(bestSolutionHolder);
-            allAlgorithms.add(bruteForceWithInitState);
+        Day day = Salesman.data.days[0];
+        City city = day.cities[0];
+        for (int actualFlight = 0; actualFlight < city.flights.length; actualFlight++) {
+            Flight flight = city.flights[actualFlight];
 
-            short numberOfCities = Salesman.cityNameMapper.getNumberOfCities();
-            short[] actualPath = new short[numberOfCities - 1];
-            for (int i = 0; i < actualPath.length; i++) {
-                actualPath[i] = NO_CITY;
-            }
 
-            short actualDayIndex = 0;
+            Runnable algorithmRunnable = () -> {
+                BruteForceWithInitState bruteForceWithInitState = new BruteForceWithInitState(bestSolutionHolder);
+                activeOrFinishedAlgorithm.add(bruteForceWithInitState);
+
+                short[] actualPath = createEmptyPath();
+                actualPath[0] = flight.destination;
+
+                short actualDayIndex = 1;
 
 
 //            //Test pro Data 10
@@ -51,18 +57,18 @@ public class ParallelManagerAlgorithm implements Algorithm {
 //            actualPath[1] = 9;
 //            actualDayIndex = 2;
 //            bruteForceWithInitState.init(actualPath, actualDayIndex, (short) 0, (short)4, 908);
-            bruteForceWithInitState.init(actualPath, actualDayIndex, (short) 0, (short) 5000, 0);
+                bruteForceWithInitState.init(actualPath, actualDayIndex, (short) 0, (short) 5000, flight.price);
 
-            try {
-                bruteForceWithInitState.start();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        };
+                try {
+                    bruteForceWithInitState.start();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            };
 
-        threadPool.execute(algorithmRunnable);
+            threadPool.execute(algorithmRunnable);
 
-
+        }
 
         threadPool.shutdown();
         threadPool.awaitTermination(1, TimeUnit.HOURS);
@@ -74,11 +80,21 @@ public class ParallelManagerAlgorithm implements Algorithm {
 
     }
 
+    private short[] createEmptyPath() {
+        short numberOfCities = Salesman.cityNameMapper.getNumberOfCities();
+        short[] actualPath = new short[numberOfCities - 1];
+        for (int i = 0; i < actualPath.length; i++) {
+            actualPath[i] = NO_CITY;
+        }
+        return actualPath;
+    }
+
     @Override
     public void stop() {
-        threadPool.shutdown();
-        synchronized (allAlgorithms) {
-            allAlgorithms.forEach(BruteForceWithInitState::stop);
+
+        threadPool.shutdownNow();
+        synchronized (activeOrFinishedAlgorithm) {
+            activeOrFinishedAlgorithm.forEach(BruteForceWithInitState::stop);
         }
     }
 }
