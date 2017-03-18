@@ -17,7 +17,7 @@ TODO - lepsi zahazovani cest, ktere uz nebudou levnejsi.
 TODO pri nacitani hrozi end of stream!!! Jak poznam ze je vse docteno?  :(
 
 
-
+Chytat vyjimky v threadech, aby to nekde nevyteklo
 
 //TODO BARGAIN SORT ALGORITHM =
 // = Seradit lety ne od nejlevnejsiho. Ale podle toho kolikátá nejlevnější cena. To je pro dané město

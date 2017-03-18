@@ -9,15 +9,15 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import static cz.vondr.kiwi.algorithm.parallel.BruteForceWithInitState.NO_CITY;
-import static java.lang.Integer.MAX_VALUE;
 
 public class ParallelManagerAlgorithm implements Algorithm {
 
-    private Solution bestSolution = new Solution(null, MAX_VALUE);
+    private BestSolution bestSolution = new BestSolution();
+
 
     @Override
     public Solution getBestSolution() {
-        return bestSolution;
+        return bestSolution.getBestSolution();
     }
 
     @Override
@@ -26,7 +26,7 @@ public class ParallelManagerAlgorithm implements Algorithm {
     }
 
     @Override
-    public void start() throws InterruptedException {
+    public void start() throws Exception {
 
         BruteForceWithInitState bruteForceWithInitState = new BruteForceWithInitState();
 
@@ -34,27 +34,32 @@ public class ParallelManagerAlgorithm implements Algorithm {
 
             short numberOfCities = Salesman.cityNameMapper.getNumberOfCities();
             short[] actualPath = new short[numberOfCities - 1];
-            for (
-                    int i = 0;
-                    i < actualPath.length; i++)
-
-            {
+            for (int i = 0; i < actualPath.length; i++) {
                 actualPath[i] = NO_CITY;
             }
 
             short actualDayIndex = 0;
 
 
-            bruteForceWithInitState.init(actualPath, actualDayIndex, (short) 0, (short) 1000);
+//            //Test pro Data 10
+//            actualPath[0] = 3;
+//            actualPath[1] = 9;
+//            actualDayIndex = 2;
+//            bruteForceWithInitState.init(actualPath, actualDayIndex, (short) 0, (short)4, 908);
+            bruteForceWithInitState.init(actualPath, actualDayIndex, (short) 0, (short) 5000, 0);
 
-            bruteForceWithInitState.start();
-            bestSolution = bruteForceWithInitState.getBestSolution();
+            try {
+                bruteForceWithInitState.start();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            bestSolution.setBestSolution(bruteForceWithInitState.getBestSolution());
         });
         algorithmThread.start();
 
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-        executor.scheduleAtFixedRate(() ->{
-            bestSolution = bruteForceWithInitState.getBestSolution();
+        executor.scheduleAtFixedRate(() -> {
+            bestSolution.setBestSolution(bruteForceWithInitState.getBestSolution());
         }, 100, 500, TimeUnit.MILLISECONDS);
 
         algorithmThread.join();

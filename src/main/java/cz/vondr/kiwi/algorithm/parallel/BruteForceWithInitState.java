@@ -32,21 +32,25 @@ public class BruteForceWithInitState {
     private short initDayIndex;
     private short initFirstFlight;
     private short initLastFlight;
+    private int initPrice;
 
     private volatile boolean stopped = false;
 
-//    @Override
+    //    @Override
     public Solution getBestSolution() {
         return bestSolution;
     }
 
-    /** length of actualPath is expected new short[numberOfCities - 1]
-     *  and actualPath is not copied */
-    public void init(short[] actualPath, short initDayIndex, short initFirstFlight, short initLastFlight) {
+    /**
+     * length of actualPath is expected new short[numberOfCities - 1]
+     * and actualPath is not copied
+     */
+    public void init(short[] actualPath, short initDayIndex, short initFirstFlight, short initLastFlight, int initPrice) {
         this.initDayIndex = initDayIndex;
         this.initFirstFlight = initFirstFlight;
         this.tmpFirstFlight = initFirstFlight;
         this.initLastFlight = initLastFlight;
+        this.initPrice = initPrice;
 
         this.data = Salesman.data;
         numberOfCities = Salesman.cityNameMapper.getNumberOfCities();
@@ -61,7 +65,7 @@ public class BruteForceWithInitState {
         }
     }
 
-//    @Override
+    //    @Override
     public void init() {
         this.data = Salesman.data;
         numberOfCities = Salesman.cityNameMapper.getNumberOfCities();
@@ -72,11 +76,11 @@ public class BruteForceWithInitState {
         visitedCities = new BitSet(numberOfCities);
     }
 
-//    @Override
-    public void start() {
+    //    @Override
+    public void start() throws Exception {
 
-        short actualCity = data.startCity;
-        int actualPrice = 0;
+        short actualCity = actualDay > 0 ? actualPath[actualDay-1] : data.startCity;
+        int actualPrice = initPrice;
 
         doNextFlight(actualDay, actualCity, actualPrice);
 
@@ -86,7 +90,7 @@ public class BruteForceWithInitState {
     short tmpFirstFlight = 0;
 
     //TODO actual day do promenne (a pri navratu ho jen odecitat, ale nekde na to nezapomenout!  :-/
-    private void doNextFlight(short actualDay, short actualCity, int actualPrice) {
+    private void doNextFlight(short actualDay, short actualCity, int actualPrice) throws Exception {
         if (stopped) {
             return;
         }
@@ -95,12 +99,16 @@ public class BruteForceWithInitState {
         Day day = data.days[actualDay];
         City city = day.cities[actualCity];
         for (int actualFlight = tmpFirstFlight; actualFlight < city.flights.length; actualFlight++) {
+            if (initDayIndex >= actualDay && actualFlight > initLastFlight) {
+                continue;
+            }
+
             testedFlights++;
             Flight flight = city.flights[actualFlight];
             short nextCity = flight.destination;
 
             //do not flight, where you already been  ||  flight to start, before last day
-            if (visitedCities.get(nextCity) || (nextCity == data.startCity && !(actualDay >= numberOfCities - 1)) )  {
+            if (visitedCities.get(nextCity) || (nextCity == data.startCity && !(actualDay >= numberOfCities - 1))) {
                 continue;
             }
 
@@ -114,12 +122,10 @@ public class BruteForceWithInitState {
                         short[] pathCopy = Arrays.copyOf(actualPath, actualPath.length);
                         bestSolution = new Solution(pathCopy, nextPrice);
                         logger.info("New Best solution found. Price = " + nextPrice + ", path=" + Arrays.toString(pathCopy) + ", testedFlights=" + testedFlights);
+//                        new SolutionWriter(data, bestSolution).writeSolutionToLog();
                     }
 //                    logger.info("Solution found. Price = " + nextPrice + ", path=" + Arrays.toString(actualPath) + ", testedFlights="+testedFlights);
                 }
-                continue;
-            }
-            if (initDayIndex >= actualDay && actualFlight > initLastFlight) {
                 continue;
             }
 
@@ -138,7 +144,7 @@ public class BruteForceWithInitState {
         }
     }
 
-//    @Override
+    //    @Override
     public void stop() {
         stopped = true;
     }
