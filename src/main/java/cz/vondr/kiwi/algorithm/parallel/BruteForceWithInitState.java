@@ -97,7 +97,7 @@ public class BruteForceWithInitState {
         City city = day.cities[actualCity];
         for (int actualFlight = tmpFirstFlight; actualFlight < city.flights.length; actualFlight++) {
             if (initDayIndex >= actualDay && actualFlight > initLastFlight) {
-                continue;
+                return;
             }
 
             testedFlights++;
