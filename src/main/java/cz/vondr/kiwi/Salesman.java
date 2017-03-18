@@ -108,10 +108,12 @@ public class Salesman {
         algorithmThread.start();
 
 
+
         //TODO MIKY - Muze si hrat s daty - uncomment this
 //        Thread mikyThread = new Thread(() -> {
-//            Data data = Salesman.data;
-//        });
+//            //TODO jdi do metody MikyChroupacDat.chroupejData()   - tam budes moct psat
+//            new MikyChroupacDat(data).chroupejData();
+//        }, "Miky-chroupac-thread");
 //        mikyThread.start();
 
 
