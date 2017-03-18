@@ -59,9 +59,7 @@ public class Salesman {
         }
 
         CountDownLatch waitForAlgorithm = new CountDownLatch(1);
-        Thread solutionWriteThread = new Thread() {
-            @Override
-            public void run() {
+        Thread solutionWriteThread = new Thread(()-> {
                 try {
                     //TODO jak dlouho pocitat, nez dam vysledek? Kdy se presne spusti casovac?
                     waitForAlgorithm.await(TOTAL_ALGORITHM_TIME, MILLISECONDS);
@@ -75,8 +73,8 @@ public class Salesman {
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
-            }
-        };
+        }, "solution-write-thread");
+        solutionWriteThread.setPriority(Thread.MAX_PRIORITY);
         solutionWriteThread.start();
 
 
@@ -88,24 +86,31 @@ public class Salesman {
 
         logger.info("Input parsed. In " + dataReadWatch);
 
-        Thread algorithmThread = new Thread() {
-            @Override
-            public void run() {
-                try {
-                    StopWatch algorithmWatch = new StopWatch();
-                    algorithm.init();
-                    algorithm.start();
-                    waitForAlgorithm.countDown();
-                    logger.info("Algorithm ended. In " + algorithmWatch);
-                } catch (Throwable t) {
-                    logger.error("ALGORITHM FATAL ERROR: ", t);
-                    // Jestli se tohle roseka, tak se modlim,
-                    // ze to mezitim dalo nejaky dobry, reseni, ktery ten vypisovaci thread vypise
-                    // :)
-                }
+        Thread algorithmThread = new Thread(() -> {
+            try {
+                StopWatch algorithmWatch = new StopWatch();
+                algorithm.init();
+                algorithm.start();
+                waitForAlgorithm.countDown();
+                logger.info("Algorithm ended. In " + algorithmWatch);
+            } catch (Throwable t) {
+                logger.error("ALGORITHM FATAL ERROR: ", t);
+                // Jestli se tohle roseka, tak se modlim,
+                // ze to mezitim dalo nejaky dobry, reseni, ktery ten vypisovaci thread vypise
+                // :)
             }
-        };
+        }, "main-algorithm-thread");
         algorithmThread.start();
+
+
+
+        //TODO MIKY - Muze si hrat s daty - uncomment this
+//        Thread mikyThread = new Thread(() -> {
+//            //TODO jdi do metody MikyChroupacDat.chroupejData()   - tam budes moct psat
+//            new MikyChroupacDat(data).chroupejData();
+//        }, "Miky-chroupac-thread");
+//        mikyThread.start();
+
 
 
         solutionWriteThread.join();

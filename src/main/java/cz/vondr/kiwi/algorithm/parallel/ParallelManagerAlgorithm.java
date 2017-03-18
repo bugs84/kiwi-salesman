@@ -22,7 +22,8 @@ public class ParallelManagerAlgorithm implements Algorithm {
 
     private final List<BruteForceWithInitState> activeOrFinishedAlgorithm = synchronizedList(new ArrayList<>());
 
-    private final ExecutorService threadPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+    //    private ExecutorService threadPool;
+    private ExecutorService threadPool;
 
     public Solution getBestSolution() {
         return bestSolutionHolder.get();
@@ -30,7 +31,8 @@ public class ParallelManagerAlgorithm implements Algorithm {
 
     @Override
     public void init() {
-
+//        Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+        threadPool = Executors.newFixedThreadPool(20);
     }
 
     @Override
