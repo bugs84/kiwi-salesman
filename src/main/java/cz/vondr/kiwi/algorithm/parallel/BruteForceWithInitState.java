@@ -76,7 +76,7 @@ public class BruteForceWithInitState {
     //    @Override
     public void start() throws Exception {
 
-        short actualCity = actualDay > 0 ? actualPath[actualDay-1] : data.startCity;
+        short actualCity = actualDay > 0 ? actualPath[actualDay - 1] : data.startCity;
         int actualPrice = initPrice;
 
         doNextFlight(actualDay, actualCity, actualPrice);
@@ -129,6 +129,9 @@ public class BruteForceWithInitState {
             }
 
             if (nextPrice >= bestSolutionHolder.get().price) { // very simple throw too expensive paths TODO do it even better
+//                if (numberOfCities - actualDay > 10) {
+//                    logger.info("faaaaar " + (numberOfCities - actualCity));
+//                }
                 continue;
             }
 
