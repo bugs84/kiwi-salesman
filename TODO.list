@@ -1,10 +1,8 @@
-Inicializovat javu rovnou s max memory! -xms30g -xmx30g     -az tu pamet zacnu pouzivat...
+Inicializovat javu s rozumnou pameti! -xms512m -xmx30g
 
-Zkompilovat bez Debugger infa
 
-spustit jvm v server módu
+spustit jvm v server módu - premerit
 
-Kdyz by tam nato byl nekde cas. Tak zahrat JVM!!!!!!!!!!  To by sakrys fakt pomohlo!!!!!
 
 na ostry run se da vyhazet logger i z gradle. uplne vyhodit zavislost (udelal bych to vedle v branchi)
 
@@ -18,9 +16,6 @@ TODO - lepsi zahazovani cest, ktere uz nebudou levnejsi.
 
 TODO pri nacitani hrozi end of stream!!! Jak poznam ze je vse docteno?  :(
 
-Mam tam predpoklad, ze data jsou serazeny po dnech.  Ale je to pravda? jsou ty data takova? = NE! nejsou opravit nacitani, jestli je potreba
-
-Solution writer ma predpoklad, ze jeden den neni mezi dvema mesty vic letu.  Je to pravda? plati to?
 
 
 
@@ -38,3 +33,18 @@ TODO
   - automaticke porovnavatko pro vyber lepsiho algoritmu
 
 
+
+
+
+Zkompilovat bez Debugger infa - to asi moc nepomuze
+
+
+
+TOHLE NEBUDE:
+Kdyz by tam nato byl nekde cas. Tak zahrat JVM!!!!!!!!!!  To by sakrys fakt pomohlo!!!!!
+
+
+HOTOVO:
+
+Snad Funguje - Mam tam predpoklad, ze data jsou serazeny po dnech.  Ale je to pravda? jsou ty data takova? = NE! nejsou opravit nacitani, jestli je potreba
+ano plati - Solution writer ma predpoklad, ze jeden den neni mezi dvema mesty vic letu.  Je to pravda? plati to? - ANO plati

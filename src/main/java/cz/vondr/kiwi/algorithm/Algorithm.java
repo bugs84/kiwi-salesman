@@ -7,7 +7,7 @@ public interface Algorithm {
 
     void init();
 
-    void start();
+    void start() throws InterruptedException;
 
     void stop();
 }
