@@ -21,7 +21,7 @@ public class InputParser {
 
     private DataInputStream input;
     private Data data;
-    private byte[] cityBytes = new byte[3];
+    private byte[] cityBytes = new byte[8];
 
     public InputParser(InputStream input, Data data) {
         this.input = new DataInputStream(new BufferedInputStream(input));
@@ -43,9 +43,10 @@ public class InputParser {
     }
 
     private void readFirstLineWithStartTown() throws Exception {
-        input.readFully(cityBytes);
+        byte[] cb = new byte[3];
+        input.readFully(cb);
 
-        CityName startTown = new CityName(cityBytes[0], cityBytes[1], cityBytes[2]);
+        CityName startTown = new CityName(cb[0], cb[1], cb[2]);
         data.startCity = cityNameMapper.nameToIndex(startTown);
         input.read();//eol
     }
@@ -53,11 +54,8 @@ public class InputParser {
     private boolean readAndParseLine() throws IOException {
         input.readFully(cityBytes);
         short from = cityNameMapper.nameToIndex(new CityName(cityBytes[0], cityBytes[1], cityBytes[2]));
+        short to = cityNameMapper.nameToIndex(new CityName(cityBytes[4], cityBytes[5], cityBytes[6]));
 
-        input.read();//space
-        input.readFully(cityBytes);
-        short to = cityNameMapper.nameToIndex(new CityName(cityBytes[0], cityBytes[1], cityBytes[2]));
-        input.read();//space
         int charInt;
         short dayIndex = 0;
         while (true) {
