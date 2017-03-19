@@ -21,7 +21,7 @@ public class InputParser {
 
     private DataInputStream input;
     private Data data;
-    private byte[] cityBytes = new byte[8];
+    private byte[] buffer = new byte[12];
 
     public InputParser(InputStream input, Data data) {
         this.input = new DataInputStream(new BufferedInputStream(input));
@@ -35,7 +35,7 @@ public class InputParser {
         try {
             while (readAndParseLine()) {
             }
-        }catch (EOFException eofe){
+        } catch (EOFException eofe) {
             logger.info("EOF reached - ok - all data was read.");
         }
 
@@ -51,15 +51,22 @@ public class InputParser {
         input.read();//eol
     }
 
-    private boolean readAndParseLine() throws IOException {
-        input.readFully(cityBytes);
-        short from = cityNameMapper.nameToIndex(new CityName(cityBytes[0], cityBytes[1], cityBytes[2]));
-        short to = cityNameMapper.nameToIndex(new CityName(cityBytes[4], cityBytes[5], cityBytes[6]));
+    private byte index = 8;
 
+    private boolean readAndParseLine() throws IOException {
+        input.readFully(buffer);
+        short from = cityNameMapper.nameToIndex(new CityName(buffer[0], buffer[1], buffer[2]));
+        short to = cityNameMapper.nameToIndex(new CityName(buffer[4], buffer[5], buffer[6]));
+        
         int charInt;
         short dayIndex = 0;
         while (true) {
-            charInt = input.read();
+            if (index < 12) {
+                charInt = buffer[index];
+                index++;
+            } else {
+                charInt = input.read();
+            }
             charInt = charInt - 48;
             if (charInt < 0) {
                 break;
@@ -69,13 +76,19 @@ public class InputParser {
 
         int price = 0;
         while (true) {
-            charInt = input.read();
+            if (index < 12) {
+                charInt = buffer[index];
+                index++;
+            } else {
+                charInt = input.read();
+            }
             charInt = charInt - 48;
             if (charInt < 0) {
                 break;
             }
             price = price * 10 + charInt;
         }
+        index = 8;
 
         addFlightToData(from, to, dayIndex, price);
 
