@@ -47,49 +47,6 @@ public class PqParallelManagerAlgorithm implements Algorithm {
         initPq();
     }
 
-//    @Override
-//    public void start() throws Exception {
-//
-//        Day day = Salesman.data.days[0];
-//        City city = day.cities[0];
-//        for (int actualFlight = 0; actualFlight < city.flights.length; actualFlight++) {
-//            Flight flight = city.flights[actualFlight];
-//
-//            Runnable algorithmRunnable = () -> {
-//                try {
-//                    BruteForceWithInitState bruteForceWithInitState = new BruteForceWithInitState(bestSolutionHolder);
-//                    activeOrFinishedAlgorithm.add(bruteForceWithInitState);
-//
-//                    short[] actualPath = createEmptyPath();
-//                    actualPath[0] = flight.destination;
-//
-//                    short actualDayIndex = 1;
-//
-//
-//                    //            //Test pro Data 10
-//                    //            actualPath[0] = 3;
-//                    //            actualPath[1] = 9;
-//                    //            actualDayIndex = 2;
-//                    //            bruteForceWithInitState.init(actualPath, actualDayIndex, (short) 0, (short)4, 908);
-//                    bruteForceWithInitState.init(actualPath, actualDayIndex, (short) 0, (short) 5000, flight.price);
-//
-//
-//                    bruteForceWithInitState.start();
-//                } catch (Exception e) {
-//                    //this should never happen, but who knows...  Return at least something...
-//                    logger.error("Algorithm Failed!!!!", e);
-////                    throw new RuntimeException(e);
-//                }
-//            };
-//
-//            threadPool.execute(algorithmRunnable);
-//
-//        }
-//
-//        threadPool.shutdown();
-//        threadPool.awaitTermination(1, TimeUnit.HOURS);
-//    }
-
     private short[] createEmptyPath() {
         short numberOfCities = Salesman.cityNameMapper.getNumberOfCities();
         short[] actualPath = new short[numberOfCities - 1];
@@ -125,8 +82,18 @@ public class PqParallelManagerAlgorithm implements Algorithm {
         //            }
         ////        }
 
-        //        1) delsi cesta
+        int priorityDiff = p1.priorityPenalty - p2.priorityPenalty;
+        if (priorityDiff != 0) {
+            return priorityDiff;
+        }
+
+
+        //        1a) delsi cesta (do hloubky)
         int pathDiff = p2.path.length - p1.path.length;
+
+
+//                1b) do sirky
+//        int pathDiff = p1.path.length - p2.path.length;
         if (pathDiff != 0) {
             return pathDiff;
         }
@@ -201,6 +168,7 @@ public class PqParallelManagerAlgorithm implements Algorithm {
 
 
             p.flightsProcessed++;
+            p.priorityPenalty++;
             if (p.flightsProcessed < city.flights.length) {
                 addToQueue(p);
             }
@@ -247,7 +215,8 @@ public class PqParallelManagerAlgorithm implements Algorithm {
             BitSet nextVisitedCities = (BitSet) p.visitedCities.clone();
             nextVisitedCities.set(nextCity);
             //                logger.info("Fly from " + actualCity + " to " + nextCity);
-            addToQueue(new Progress(nextPath, nextVisitedCities, nextPrice /**, (short) 0/* TODO promyslet * */));
+            int nextPriorityPenalty = p.priorityPenalty + actualFlight + 1;
+            addToQueue(new Progress(nextPath, nextVisitedCities, nextPrice, nextPriorityPenalty));
 
 
             //Zpomal pokud je fronta moc plna
@@ -261,8 +230,6 @@ public class PqParallelManagerAlgorithm implements Algorithm {
 
         threadPool.shutdown();
         threadPool.awaitTermination(1, TimeUnit.HOURS);
-//        queue.clear();//clear or not to clear - omg its too late today - fresh is not my name right now :)
-
 
         logger.info("Algorithm ended - TestedFlights=" + testedFlights);
 

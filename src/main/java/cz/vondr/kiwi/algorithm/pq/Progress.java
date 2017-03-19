@@ -18,10 +18,19 @@ public class Progress {
     public short flightsProcessed = 0;
 //    public int nextFlightPrice;
 
+    public int priorityPenalty = 1;
+
     public Progress(short[] path, BitSet visitedCities, int price) {
         this.path = path;
         this.visitedCities = visitedCities;
         this.price = price;
+    }
+
+    public Progress(short[] path, BitSet visitedCities, int price, int priorityPenalty) {
+        this.path = path;
+        this.visitedCities = visitedCities;
+        this.price = price;
+        this.priorityPenalty = priorityPenalty;
     }
 
     public short getDayIndex() {
