@@ -45,18 +45,18 @@ public class InputParser {
     private void readFirstLineWithStartTown() throws Exception {
         input.readFully(cityBytes);
 
-        CityName startTown = new CityName(cityBytes);
+        CityName startTown = new CityName(cityBytes[0], cityBytes[1], cityBytes[2]);
         data.startCity = cityNameMapper.nameToIndex(startTown);
         input.read();//eol
     }
 
     private boolean readAndParseLine() throws IOException {
         input.readFully(cityBytes);
-        short from = cityNameMapper.nameToIndex(new CityName(cityBytes));
+        short from = cityNameMapper.nameToIndex(new CityName(cityBytes[0], cityBytes[1], cityBytes[2]));
 
         input.read();//space
         input.readFully(cityBytes);
-        short to = cityNameMapper.nameToIndex(new CityName(cityBytes));
+        short to = cityNameMapper.nameToIndex(new CityName(cityBytes[0], cityBytes[1], cityBytes[2]));
         input.read();//space
         int charInt;
         short dayIndex = 0;
