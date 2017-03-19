@@ -273,7 +273,7 @@ public class PqParallelManagerAlgorithm implements Algorithm {
                 //            bruteForceWithInitState.init(actualPath, actualDayIndex, (short) 0, (short)4, 908);
                 bruteForceWithInitState.init(actualPath, actualDayIndex, p.flightsProcessed, p.flightsProcessed, p.price);
 
-
+                logger.info("Start PQ - " + Arrays.toString(p.path) + " - flight=" + p.flightsProcessed + ",  pPenalty="+ p.priorityPenalty + ",  price=" + p.price);
                 logger.info("Start PQ - " + Arrays.toString(p.path) + " - flight=" + p.flightsProcessed + ",  pPenalty="+ p.priorityPenalty + ",  price=" + p.price);
                 bruteForceWithInitState.start();
             } catch (Exception e) {
