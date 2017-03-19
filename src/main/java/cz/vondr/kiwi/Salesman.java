@@ -2,6 +2,7 @@ package cz.vondr.kiwi;
 
 import cz.vondr.kiwi.algorithm.Algorithm;
 import cz.vondr.kiwi.algorithm.parallel.ParallelManagerAlgorithm;
+import cz.vondr.kiwi.algorithm.parallel.PqParallelManagerAlgorithm;
 import cz.vondr.kiwi.algorithm.pq.PriorityQueueAlgorithm;
 import cz.vondr.kiwi.algorithm.progressiveDepthPriorityAlgorithm.ProgressiveDepthPriorityQueueAlgorithm;
 import cz.vondr.kiwi.algorithm.simple.SimpleBruteForceAlgorithm;
@@ -35,7 +36,7 @@ public class Salesman {
         StopWatch wholeRun = actualTime.start();
 
         Algorithm algorithm;
-        switch (6) {
+        switch (7) {
             case 1:
                 algorithm = new SimpleBruteForceAlgorithm();
                 break;
@@ -54,25 +55,28 @@ public class Salesman {
             case 6:
                 algorithm = new ParallelManagerAlgorithm();
                 break;
+            case 7:
+                algorithm = new PqParallelManagerAlgorithm();
+                break;
             default:
                 throw new IllegalStateException();
         }
 
         CountDownLatch waitForAlgorithm = new CountDownLatch(1);
-        Thread solutionWriteThread = new Thread(()-> {
-                try {
-                    //TODO jak dlouho pocitat, nez dam vysledek? Kdy se presne spusti casovac?
-                    waitForAlgorithm.await(TOTAL_ALGORITHM_TIME, MILLISECONDS);
-                    new Thread(algorithm::stop).start();//stop algorithm in new background thread
+        Thread solutionWriteThread = new Thread(() -> {
+            try {
+                //TODO jak dlouho pocitat, nez dam vysledek? Kdy se presne spusti casovac?
+                waitForAlgorithm.await(TOTAL_ALGORITHM_TIME, MILLISECONDS);
+                new Thread(algorithm::stop).start();//stop algorithm in new background thread
 
-                    logger.info("Algorithm stop was called.");
-                    Solution bestSolution = algorithm.getBestSolution();
-                    StopWatch writeSolutionWatch = new StopWatch();
-                    new SolutionWriter(data, bestSolution).writeSolutionToSystemOutputAndLog();
-                    logger.info("Write solution ended. In " + writeSolutionWatch);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
+                logger.info("Algorithm stop was called.");
+                Solution bestSolution = algorithm.getBestSolution();
+                StopWatch writeSolutionWatch = new StopWatch();
+                new SolutionWriter(data, bestSolution).writeSolutionToSystemOutputAndLog();
+                logger.info("Write solution ended. In " + writeSolutionWatch);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }, "solution-write-thread");
         solutionWriteThread.setPriority(Thread.MAX_PRIORITY);
         solutionWriteThread.start();
@@ -103,14 +107,12 @@ public class Salesman {
         algorithmThread.start();
 
 
-
         //TODO MIKY - Muze si hrat s daty - uncomment this
 //        Thread mikyThread = new Thread(() -> {
 //            //TODO jdi do metody MikyChroupacDat.chroupejData()   - tam budes moct psat
 //            new MikyChroupacDat(data).chroupejData();
 //        }, "Miky-chroupac-thread");
 //        mikyThread.start();
-
 
 
         solutionWriteThread.join();
