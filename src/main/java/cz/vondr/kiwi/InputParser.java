@@ -8,6 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.BufferedInputStream;
+import java.io.DataInputStream;
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -17,12 +19,12 @@ import static cz.vondr.kiwi.Salesman.cityNameMapper;
 public class InputParser {
     private final static Logger logger = LoggerFactory.getLogger(InputParser.class);
 
-    private BufferedInputStream input;
+    private DataInputStream input;
     private Data data;
     private byte[] cityBytes = new byte[3];
 
     public InputParser(InputStream input, Data data) {
-        this.input = new BufferedInputStream(input);
+        this.input = new DataInputStream(new BufferedInputStream(input));
         this.data = data;
     }
 
@@ -30,14 +32,18 @@ public class InputParser {
         readFirstLineWithStartTown();
         logger.info("First town was read.");
 
-        while (readAndParseLine()) {
+        try {
+            while (readAndParseLine()) {
+            }
+        }catch (EOFException eofe){
+            logger.info("EOF reached - ok - all data was read.");
         }
 
         logger.info("Last town was read.");
     }
 
     private void readFirstLineWithStartTown() throws Exception {
-        input.read(cityBytes);
+        input.readFully(cityBytes);
 
         CityName startTown = new CityName(cityBytes);
         data.startCity = cityNameMapper.nameToIndex(startTown);
@@ -45,12 +51,11 @@ public class InputParser {
     }
 
     private boolean readAndParseLine() throws IOException {
-        if (input.read(cityBytes) == -1) {
-            return false; //end of stream
-        }
+        input.readFully(cityBytes);
         short from = cityNameMapper.nameToIndex(new CityName(cityBytes));
+
         input.read();//space
-        input.read(cityBytes);
+        input.readFully(cityBytes);
         short to = cityNameMapper.nameToIndex(new CityName(cityBytes));
         input.read();//space
         int charInt;
