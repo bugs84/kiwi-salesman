@@ -39,15 +39,14 @@ public class InputParser {
     }
 
     private int position = 0;
-    private boolean handleEOF = true;
 
     private void readAndParseAllLines() throws IOException {
         while (true) {
             try {
                 while (true) {
                     if (position == 0) {
+                        bb = new byte[BB_SIZE];
                         input.readFully(bb, 0, BB_SIZE);
-                        handleEOF = false;
                     }
                     if (BB_SIZE - position > 17) {
                         short from = cityNameMapper.nameToIndex(new CityName(bb[position], bb[position + 1], bb[position + 2]));
@@ -240,34 +239,32 @@ public class InputParser {
                 }
             } catch (EOFException e) {
                 // dat je min nez buffer size a precist 0..position
-                if (handleEOF) {
-                    while (bb[position] != 0) {
-                        short from = cityNameMapper.nameToIndex(new CityName(bb[position++], bb[position++], bb[position++]));
-                        position++;
-                        short to = cityNameMapper.nameToIndex(new CityName(bb[position++], bb[position++], bb[position++]));
-                        position++;
-                        int charInt;
-                        short dayIndex = 0;
-                        while (true) {
-                            charInt = bb[position++];
-                            charInt = charInt - 48;
-                            if (charInt < 0) {
-                                break;
-                            }
-                            dayIndex = (short) (dayIndex * 10 + charInt);
+                while (bb[position] != 0) {
+                    short from = cityNameMapper.nameToIndex(new CityName(bb[position++], bb[position++], bb[position++]));
+                    position++;
+                    short to = cityNameMapper.nameToIndex(new CityName(bb[position++], bb[position++], bb[position++]));
+                    position++;
+                    int charInt;
+                    short dayIndex = 0;
+                    while (true) {
+                        charInt = bb[position++];
+                        charInt = charInt - 48;
+                        if (charInt < 0) {
+                            break;
                         }
-
-                        int price = 0;
-                        while (true) {
-                            charInt = bb[position++];
-                            charInt = charInt - 48;
-                            if (charInt < 0) {
-                                break;
-                            }
-                            price = price * 10 + charInt;
-                        }
-                        addFlightToData(from, to, dayIndex, price);
+                        dayIndex = (short) (dayIndex * 10 + charInt);
                     }
+
+                    int price = 0;
+                    while (true) {
+                        charInt = bb[position++];
+                        charInt = charInt - 48;
+                        if (charInt < 0) {
+                            break;
+                        }
+                        price = price * 10 + charInt;
+                    }
+                    addFlightToData(from, to, dayIndex, price);
                 }
                 logger.info("EOF reached - ok - all data was read.");
             }
