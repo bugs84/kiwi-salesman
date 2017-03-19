@@ -8,6 +8,7 @@ import cz.vondr.kiwi.algorithm.simple.SimpleBruteForceAlgorithm;
 import cz.vondr.kiwi.algorithm.simple.SimpleOptimalizedBruteForceAlgorithm;
 import cz.vondr.kiwi.algorithm.time_based.TimeBasedAlgorithm;
 import cz.vondr.kiwi.data.Data;
+import cz.vondr.kiwi.miky.MikyChroupacDat;
 import cz.vondr.kiwi.solutionwriter.SolutionWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +17,7 @@ import java.io.InputStream;
 import java.util.concurrent.CountDownLatch;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
+
 
 public class Salesman {
     private final static Logger logger = LoggerFactory.getLogger(Salesman.class);
@@ -105,11 +107,11 @@ public class Salesman {
 
 
         //TODO MIKY - Muze si hrat s daty - uncomment this
-//        Thread mikyThread = new Thread(() -> {
-//            //TODO jdi do metody MikyChroupacDat.chroupejData()   - tam budes moct psat
-//            new MikyChroupacDat(data).chroupejData();
-//        }, "Miky-chroupac-thread");
-//        mikyThread.start();
+        Thread mikyThread = new Thread(() -> {
+            //TODO jdi do metody MikyChroupacDat.chroupejData()   - tam budes moct psat
+            new MikyChroupacDat(data).chroupejData();
+        }, "Miky-chroupac-thread");
+        mikyThread.start();
 
 
 
