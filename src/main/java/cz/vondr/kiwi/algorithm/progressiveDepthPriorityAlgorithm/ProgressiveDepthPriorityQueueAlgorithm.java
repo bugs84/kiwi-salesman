@@ -8,10 +8,7 @@ import cz.vondr.kiwi.data.City;
 import cz.vondr.kiwi.data.Data;
 import cz.vondr.kiwi.data.Day;
 import cz.vondr.kiwi.data.Flight;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Comparator;
 import java.util.PriorityQueue;
@@ -22,7 +19,6 @@ import java.util.TimerTask;
 import static java.lang.Integer.MAX_VALUE;
 
 public class ProgressiveDepthPriorityQueueAlgorithm implements Algorithm {
-    private final static Logger logger = LoggerFactory.getLogger(ProgressiveDepthPriorityQueueAlgorithm.class);
 
     private static final int QUEUE_INITIAL_CAPACITY = 5000;
 
@@ -173,7 +169,6 @@ public class ProgressiveDepthPriorityQueueAlgorithm implements Algorithm {
                     if (nextPrice < bestSolution.price) {
 //                            short[] pathCopy = Arrays.copyOf(actualPath, actualPath.length);
                         bestSolution = new Solution(p.path, nextPrice);
-                        logger.info("New Best solution found. Price = " + nextPrice + ", path=" + Arrays.toString(bestSolution.path) + ", testedFlights=" + testedFlights);
                     }
                     //                    logger.info("Solution found. Price = " + nextPrice + ", path=" + Arrays.toString(actualPath) + ", testedFlights="+testedFlights);
                 }
@@ -198,7 +193,6 @@ public class ProgressiveDepthPriorityQueueAlgorithm implements Algorithm {
         queue.clear();//clear or not to clear - omg its too late today - fresh is not my name right now :)
 
 
-        logger.info("Algorithm ended - TestedFlights=" + testedFlights);
 
     }
 

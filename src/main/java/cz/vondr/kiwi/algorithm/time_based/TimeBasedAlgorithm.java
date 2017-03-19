@@ -6,8 +6,6 @@ import cz.vondr.kiwi.StopWatch;
 import cz.vondr.kiwi.algorithm.Algorithm;
 import cz.vondr.kiwi.data.Data;
 import cz.vondr.kiwi.solutionwriter.SolutionWriter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.BitSet;
@@ -16,7 +14,6 @@ import static java.lang.Integer.MAX_VALUE;
 
 public class TimeBasedAlgorithm implements Algorithm {
 
-    private final static Logger logger = LoggerFactory.getLogger(TimeBasedAlgorithm.class);
 
     private Solution bestSolution = new Solution(null, MAX_VALUE);
 
@@ -123,7 +120,6 @@ public class TimeBasedAlgorithm implements Algorithm {
 
     @Override
     public void stop() {
-        logger.error("STOP IS NOT IMPLEMENTED HERE!!!!!!!!!!!!!");
     }
 
 

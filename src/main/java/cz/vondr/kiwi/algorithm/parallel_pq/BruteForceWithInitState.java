@@ -7,15 +7,12 @@ import cz.vondr.kiwi.data.City;
 import cz.vondr.kiwi.data.Data;
 import cz.vondr.kiwi.data.Day;
 import cz.vondr.kiwi.data.Flight;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.BitSet;
 
 public class BruteForceWithInitState {
 
-    private final static Logger logger = LoggerFactory.getLogger(BruteForceWithInitState.class);
     public static final int NO_CITY = -1;
 
     private BestSolutionHolder bestSolutionHolder;
@@ -123,7 +120,6 @@ public class BruteForceWithInitState {
                         short[] pathCopy = Arrays.copyOf(actualPath, actualPath.length);
                         bestSolution = new Solution(pathCopy, nextPrice);
                         this.bestSolutionHolder.set(bestSolution);
-                        logger.info("New Best solution found. Price = " + nextPrice + ", path=" + Arrays.toString(pathCopy) + ", testedFlights=" + testedFlights);
 //                        new SolutionWriter(data, bestSolution).writeSolutionToLog();
                     }
 //                    logger.info("Solution found. Price = " + nextPrice + ", path=" + Arrays.toString(actualPath) + ", testedFlights="+testedFlights);

@@ -3,8 +3,6 @@ package cz.vondr.kiwi.solutionwriter;
 import cz.vondr.kiwi.Solution;
 import cz.vondr.kiwi.data.Data;
 import cz.vondr.kiwi.data.Flight;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.List;
@@ -13,7 +11,6 @@ import java.util.stream.Collectors;
 import static cz.vondr.kiwi.Salesman.cityNameMapper;
 
 public class SolutionWriter {
-    private final static Logger logger = LoggerFactory.getLogger(SolutionWriter.class);
 
     private Data data;
     private Solution solution;
@@ -40,7 +37,6 @@ public class SolutionWriter {
     }
 
     private void writeSolutionStringToLog(String solutionString) {
-        logger.info("Solution:\n" + solutionString);
     }
 
 

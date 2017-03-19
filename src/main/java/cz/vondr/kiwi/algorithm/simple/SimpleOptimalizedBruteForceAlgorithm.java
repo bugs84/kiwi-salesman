@@ -7,8 +7,6 @@ import cz.vondr.kiwi.data.City;
 import cz.vondr.kiwi.data.Data;
 import cz.vondr.kiwi.data.Day;
 import cz.vondr.kiwi.data.Flight;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.BitSet;
@@ -17,7 +15,6 @@ import static java.lang.Integer.MAX_VALUE;
 
 public class SimpleOptimalizedBruteForceAlgorithm implements Algorithm {
 
-    private final static Logger logger = LoggerFactory.getLogger(SimpleOptimalizedBruteForceAlgorithm.class);
     private static final int NO_CITY = -1;
 
     private Solution bestSolution = new Solution(null, MAX_VALUE);
@@ -55,7 +52,6 @@ public class SimpleOptimalizedBruteForceAlgorithm implements Algorithm {
 
         doNextFlight(actualDay, actualCity, actualPrice);
 
-        logger.info("BruteForce Ended - testedFlights= " + testedFlights);
     }
 
     private void doNextFlight(short actualDay, short actualCity, int actualPrice) {
@@ -84,7 +80,6 @@ public class SimpleOptimalizedBruteForceAlgorithm implements Algorithm {
                     if (nextPrice < bestSolution.price) {
                         short[] pathCopy = Arrays.copyOf(actualPath, actualPath.length);
                         bestSolution = new Solution(pathCopy, nextPrice);
-                        logger.info("New Best solution found. Price = " + nextPrice + ", path=" + Arrays.toString(pathCopy) + ", testedFlights=" + testedFlights);
                     }
 //                    logger.info("Solution found. Price = " + nextPrice + ", path=" + Arrays.toString(actualPath) + ", testedFlights="+testedFlights);
                 }

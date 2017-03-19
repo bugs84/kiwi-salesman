@@ -1,14 +1,10 @@
 package cz.vondr.kiwi;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.HashMap;
 import java.util.Map;
 
 public class CityNameMapper {
 
-    private final static Logger logger = LoggerFactory.getLogger(CityNameMapper.class);
 
     //         <CityName, CityIndex>
     private Map<CityName, Short> nameMap = new HashMap<>();
@@ -38,6 +34,5 @@ public class CityNameMapper {
         indexMap.forEach((index, city) ->
                 sb.append(String.format("% 3d", index)).append(" : ").append(city).append('\n')
         );
-        logger.info(sb.toString());
     }
 }

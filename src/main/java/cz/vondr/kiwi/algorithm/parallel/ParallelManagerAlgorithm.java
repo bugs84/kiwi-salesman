@@ -6,8 +6,6 @@ import cz.vondr.kiwi.algorithm.Algorithm;
 import cz.vondr.kiwi.data.City;
 import cz.vondr.kiwi.data.Day;
 import cz.vondr.kiwi.data.Flight;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +18,6 @@ import static java.util.Collections.synchronizedList;
 
 public class ParallelManagerAlgorithm implements Algorithm {
 
-    private final static Logger logger = LoggerFactory.getLogger(ParallelManagerAlgorithm.class);
 
     private BestSolutionHolder bestSolutionHolder = new BestSolutionHolder();
 
@@ -69,7 +66,6 @@ public class ParallelManagerAlgorithm implements Algorithm {
                     bruteForceWithInitState.start();
                 } catch (Exception e) {
                     //this should never happen, but who knows...  Return at least something...
-                    logger.error("Algorithm Failed!!!!", e);
 //                    throw new RuntimeException(e);
                 }
             };

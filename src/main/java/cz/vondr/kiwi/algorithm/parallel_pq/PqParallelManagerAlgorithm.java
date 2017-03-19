@@ -9,8 +9,6 @@ import cz.vondr.kiwi.data.City;
 import cz.vondr.kiwi.data.Data;
 import cz.vondr.kiwi.data.Day;
 import cz.vondr.kiwi.data.Flight;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.BitSet;
@@ -27,7 +25,6 @@ import static java.util.Collections.synchronizedList;
 
 public class PqParallelManagerAlgorithm implements Algorithm {
 
-    private final static Logger logger = LoggerFactory.getLogger(PqParallelManagerAlgorithm.class);
 
     private BestSolutionHolder bestSolutionHolder = new BestSolutionHolder();
 
@@ -224,7 +221,6 @@ public class PqParallelManagerAlgorithm implements Algorithm {
         threadPool.shutdown();
         threadPool.awaitTermination(1, TimeUnit.HOURS);
 
-        logger.info("Algorithm ended - TestedFlights=" + testedFlights);
 
     }
 
@@ -243,7 +239,6 @@ public class PqParallelManagerAlgorithm implements Algorithm {
                 bruteForceWithInitState.start();
             } catch (Exception e) {
                 //this should never happen, but who knows...  Return at least something...
-                logger.error("Initial Algorithm Failed!!!!", e);
                 //                    throw new RuntimeException(e);
             }
         };
@@ -276,7 +271,6 @@ public class PqParallelManagerAlgorithm implements Algorithm {
                 bruteForceWithInitState.start();
             } catch (Exception e) {
                 //this should never happen, but who knows...  Return at least something...
-                logger.error("Successive Algorithm Failed!!!!", e);
                 //                    throw new RuntimeException(e);
             }
         };
