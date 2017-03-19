@@ -4,8 +4,6 @@ import cz.vondr.kiwi.data.City;
 import cz.vondr.kiwi.data.Data;
 import cz.vondr.kiwi.data.Day;
 import cz.vondr.kiwi.data.Flight;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;
@@ -17,7 +15,6 @@ import java.util.List;
 import static cz.vondr.kiwi.Salesman.cityNameMapper;
 
 public class InputParser {
-    private final static Logger logger = LoggerFactory.getLogger(InputParser.class);
 
     private DataInputStream input;
     private Data data;
@@ -31,11 +28,9 @@ public class InputParser {
 
     public void readInputAndFillData() throws Exception {
         readFirstLineWithStartTown();
-        logger.info("First town was read.");
 
         readAndParseAllLines();
 
-        logger.info("Last town was read.");
     }
 
     private int position = 0;
@@ -266,7 +261,6 @@ public class InputParser {
                     }
                     addFlightToData(from, to, dayIndex, price);
                 }
-                logger.info("EOF reached - ok - all data was read.");
             }
             break;
         }
