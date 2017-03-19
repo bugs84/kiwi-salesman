@@ -6,6 +6,8 @@ import cz.vondr.kiwi.algorithm.Algorithm;
 import cz.vondr.kiwi.data.City;
 import cz.vondr.kiwi.data.Day;
 import cz.vondr.kiwi.data.Flight;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +19,8 @@ import static cz.vondr.kiwi.algorithm.parallel.BruteForceWithInitState.NO_CITY;
 import static java.util.Collections.synchronizedList;
 
 public class ParallelManagerAlgorithm implements Algorithm {
+
+    private final static Logger logger = LoggerFactory.getLogger(ParallelManagerAlgorithm.class);
 
     private BestSolutionHolder bestSolutionHolder = new BestSolutionHolder();
 
@@ -45,26 +49,29 @@ public class ParallelManagerAlgorithm implements Algorithm {
 
 
             Runnable algorithmRunnable = () -> {
-                BruteForceWithInitState bruteForceWithInitState = new BruteForceWithInitState(bestSolutionHolder);
-                activeOrFinishedAlgorithm.add(bruteForceWithInitState);
-
-                short[] actualPath = createEmptyPath();
-                actualPath[0] = flight.destination;
-
-                short actualDayIndex = 1;
-
-
-//            //Test pro Data 10
-//            actualPath[0] = 3;
-//            actualPath[1] = 9;
-//            actualDayIndex = 2;
-//            bruteForceWithInitState.init(actualPath, actualDayIndex, (short) 0, (short)4, 908);
-                bruteForceWithInitState.init(actualPath, actualDayIndex, (short) 0, (short) 5000, flight.price);
-
                 try {
+                    BruteForceWithInitState bruteForceWithInitState = new BruteForceWithInitState(bestSolutionHolder);
+                    activeOrFinishedAlgorithm.add(bruteForceWithInitState);
+
+                    short[] actualPath = createEmptyPath();
+                    actualPath[0] = flight.destination;
+
+                    short actualDayIndex = 1;
+
+
+                    //            //Test pro Data 10
+                    //            actualPath[0] = 3;
+                    //            actualPath[1] = 9;
+                    //            actualDayIndex = 2;
+                    //            bruteForceWithInitState.init(actualPath, actualDayIndex, (short) 0, (short)4, 908);
+                    bruteForceWithInitState.init(actualPath, actualDayIndex, (short) 0, (short) 5000, flight.price);
+
+
                     bruteForceWithInitState.start();
                 } catch (Exception e) {
-                    throw new RuntimeException(e);
+                    //this should never happen, but who knows...  Return at least something...
+                    logger.error("Algorithm Failed!!!!", e);
+//                    throw new RuntimeException(e);
                 }
             };
 
@@ -79,7 +86,6 @@ public class ParallelManagerAlgorithm implements Algorithm {
 //        Thread algorithmThread = new Thread(algorithmRunnable);
 //        algorithmThread.start();
 //        algorithmThread.join();
-
     }
 
     private short[] createEmptyPath() {
