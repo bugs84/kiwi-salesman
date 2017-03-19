@@ -1,9 +1,6 @@
 package cz.vondr.kiwi;
 
-import cz.vondr.kiwi.data.City;
-import cz.vondr.kiwi.data.Data;
-import cz.vondr.kiwi.data.Day;
-import cz.vondr.kiwi.data.Flight;
+import cz.vondr.kiwi.data.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -110,10 +107,23 @@ public class InputParser {
             return;
         }
 
+        // flight
+        Flight flight = new Flight(to, price, from, dayIndex);
+
         //add flight
         Day day = getDay(data.daysInput, dayIndex);
         City city = getCity(day.citiesInput, from);
-        city.flightsInput.add(new Flight(to, price));
+        city.flightsInput.add(flight);
+
+        // arrival
+        Destination destination = getDestination(data.destsArrivals, from);
+        DayMiky dayMiky = getDayMiky(destination.days, dayIndex);
+        dayMiky.flights.add(flight);
+
+        // departure
+        destination = getDestination(data.destsDepartures, to);
+        dayMiky = getDayMiky(destination.days, dayIndex);
+        dayMiky.flights.add(flight);
     }
 
     private Day getDay(List<Day> list, short index) {
@@ -129,4 +139,19 @@ public class InputParser {
         }
         return list.get(index);
     }
+
+    private DayMiky getDayMiky(List<DayMiky> list, short index) {
+        while (list.size() <= index) {
+            list.add(new DayMiky());
+        }
+        return list.get(index);
+    }
+
+    private Destination getDestination(List<Destination> list, short index) {
+        while (list.size() <= index) {
+            list.add(new Destination());
+        }
+        return list.get(index);
+    }
+
 }
