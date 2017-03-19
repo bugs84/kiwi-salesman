@@ -39,6 +39,11 @@ public class SimpleTest {
     }
 
     @Test
+    public void realData50() throws Exception {
+        testFromFile("c:\\prac\\Java\\Projects\\kiwi-salesman\\RealData\\data_50.txt");
+    }
+
+    @Test
     public void realData100() throws Exception {
         testFromFile("c:\\prac\\Java\\Projects\\kiwi-salesman\\RealData\\data_100.txt");
     }

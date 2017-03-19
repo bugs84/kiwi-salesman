@@ -14,11 +14,9 @@ public class Progress {
 
     public final int price;
 
+    public int priorityPenalty = 1;
 
     public short flightsProcessed = 0;
-//    public int nextFlightPrice;
-
-    public int priorityPenalty = 1;
 
     public Progress(short[] path, BitSet visitedCities, int price) {
         this.path = path;
@@ -33,6 +31,12 @@ public class Progress {
         this.priorityPenalty = priorityPenalty;
     }
 
+    public Progress copy() {
+        Progress newProgress = new Progress(this.path, this.visitedCities, this.price, this.priorityPenalty);
+        newProgress.flightsProcessed=this.flightsProcessed;
+        return newProgress;
+    }
+
     public short getDayIndex() {
         return (short) path.length;
     }
@@ -44,4 +48,5 @@ public class Progress {
             return path[path.length - 1];
         }
     }
+
 }
