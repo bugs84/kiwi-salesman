@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Comparator;
 import java.util.List;
@@ -252,6 +251,7 @@ public class PqParallelManagerAlgorithm implements Algorithm {
         threadPool.execute(algorithmRunnable);
     }
 
+    int numOfFinishedAlg = 0;
     private void addBruteForceThread(Progress p) {
 
         Runnable algorithmRunnable = () -> {
@@ -273,9 +273,9 @@ public class PqParallelManagerAlgorithm implements Algorithm {
                 //            bruteForceWithInitState.init(actualPath, actualDayIndex, (short) 0, (short)4, 908);
                 bruteForceWithInitState.init(actualPath, actualDayIndex, p.flightsProcessed, p.flightsProcessed, p.price);
 
-                logger.info("Start PQ - " + Arrays.toString(p.path) + " - flight=" + p.flightsProcessed + ",  pPenalty="+ p.priorityPenalty + ",  price=" + p.price);
-                logger.info("Start PQ - " + Arrays.toString(p.path) + " - flight=" + p.flightsProcessed + ",  pPenalty="+ p.priorityPenalty + ",  price=" + p.price);
+//                logger.info("Start PQ - " + Arrays.toString(p.path) + " - flight=" + p.flightsProcessed + ",  pPenalty="+ p.priorityPenalty + ",  price=" + p.price);
                 bruteForceWithInitState.start();
+                logger.info("FinishedAlg " + ++numOfFinishedAlg );
             } catch (Exception e) {
                 //this should never happen, but who knows...  Return at least something...
                 logger.error("Successive Algorithm Failed!!!!", e);

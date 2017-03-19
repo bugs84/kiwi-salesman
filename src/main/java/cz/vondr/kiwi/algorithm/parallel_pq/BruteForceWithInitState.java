@@ -131,7 +131,7 @@ public class BruteForceWithInitState {
                 continue;
             }
 
-            if (nextPrice >= bestSolutionHolder.get().price) { // very simple throw too expensive paths TODO do it even better
+            if (nextPrice + data.minPriceEver*(numberOfCities - 1 - nextDay )>= bestSolutionHolder.get().price) { // very simple throw too expensive paths TODO do it even better
 //                if (numberOfCities - actualDay > 10) {
 //                    logger.info("faaaaar " + (numberOfCities - actualCity));
 //                }

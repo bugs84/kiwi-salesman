@@ -20,7 +20,7 @@ public class PrepareData {
 
     void prepare() {
         data.numberOfCities = Salesman.cityNameMapper.getNumberOfCities();
-
+        int minPriceEver = data.minPriceEver;
 
         //sort flights
         List<Day> days = data.daysInput;
@@ -33,12 +33,18 @@ public class PrepareData {
                 flights.sort(FLIGHT_COMPARATOR);
                 city.flights = city.flightsInput.toArray(new Flight[city.flightsInput.size()]);
                 city.flightsInput = null;
+
+                if (city.flights.length > 0 && minPriceEver > city.flights[0].price) {
+                    minPriceEver = city.flights[0].price;
+                }
+
             }
             day.cities = day.citiesInput.toArray(new City[day.citiesInput.size()]);
             day.citiesInput = null;
         }
         data.days = data.daysInput.toArray(new Day[data.daysInput.size()]);
         data.daysInput = null;
+        data.minPriceEver = minPriceEver;
     }
 
 }
