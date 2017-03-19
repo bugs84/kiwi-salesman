@@ -2,7 +2,7 @@ package cz.vondr.kiwi;
 
 import cz.vondr.kiwi.algorithm.Algorithm;
 import cz.vondr.kiwi.algorithm.parallel.ParallelManagerAlgorithm;
-import cz.vondr.kiwi.algorithm.parallel.PqParallelManagerAlgorithm;
+import cz.vondr.kiwi.algorithm.parallel_pq.PqParallelManagerAlgorithm;
 import cz.vondr.kiwi.algorithm.pq.PriorityQueueAlgorithm;
 import cz.vondr.kiwi.algorithm.progressiveDepthPriorityAlgorithm.ProgressiveDepthPriorityQueueAlgorithm;
 import cz.vondr.kiwi.algorithm.simple.SimpleBruteForceAlgorithm;
