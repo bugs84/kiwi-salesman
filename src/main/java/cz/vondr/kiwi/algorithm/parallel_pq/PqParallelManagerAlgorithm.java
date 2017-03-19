@@ -175,7 +175,7 @@ public class PqParallelManagerAlgorithm implements Algorithm {
 
 
             //NEPOUSTET dalsi thread, kdyz je do konce mene nez cca 15 mest
-            if ((numberOfCities - 1 - actualCity) < 15) {
+            if ((numberOfCities - 1 - actualDay) < 15) {
                 continue;
             }
 

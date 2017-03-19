@@ -64,6 +64,15 @@ public class SimpleTest {
     }
 
     @Test
+    public void generated0() throws Exception {
+//        data_grouped_50_from_200_continuous_blocks_9.txt
+        testFromFile("c:\\prac\\Java\\Projects\\kiwi-salesman\\generated_data\\data_grouped_50_from_100_continuous_blocks_0.txt");
+
+        //TYhle jsou vadny
+//        testFromFile("c:\\prac\\Java\\Projects\\kiwi-salesman\\generated_data\\data_grouped_50_from_200_continuous_blocks_9.txt");
+    }
+
+    @Test
     public void realData300() throws Exception {
         testFromFile("c:\\prac\\Java\\Projects\\kiwi-salesman\\RealData\\data_300.txt");
     }

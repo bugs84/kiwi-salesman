@@ -4,6 +4,8 @@ import cz.vondr.kiwi.data.City;
 import cz.vondr.kiwi.data.Data;
 import cz.vondr.kiwi.data.Day;
 import cz.vondr.kiwi.data.Flight;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;
@@ -15,10 +17,12 @@ import java.util.List;
 import static cz.vondr.kiwi.Salesman.cityNameMapper;
 
 public class InputParser {
+    private final static Logger logger = LoggerFactory.getLogger(InputParser.class);
 
     private DataInputStream input;
     private Data data;
-    private byte[] buffer = new byte[12];
+    private static final int BB_SIZE = 64 * 1024;
+    private byte[] bb = new byte[BB_SIZE];
 
     public InputParser(InputStream input, Data data) {
         this.input = new DataInputStream(new BufferedInputStream(input));
@@ -27,13 +31,245 @@ public class InputParser {
 
     public void readInputAndFillData() throws Exception {
         readFirstLineWithStartTown();
+        logger.info("First town was read.");
 
-        try {
-            while (readAndParseLine()) {
+        readAndParseAllLines();
+
+        logger.info("Last town was read.");
+    }
+
+    private int position = 0;
+
+    private void readAndParseAllLines() throws IOException {
+        while (true) {
+            try {
+                while (true) {
+                    if (position == 0) {
+                        bb = new byte[BB_SIZE];
+                        input.readFully(bb, 0, BB_SIZE);
+                    }
+                    if (BB_SIZE - position > 17) {
+                        short from = cityNameMapper.nameToIndex(new CityName(bb[position], bb[position + 1], bb[position + 2]));
+                        short to = cityNameMapper.nameToIndex(new CityName(bb[position + 4], bb[position + 5], bb[position + 6]));
+                        position += 7;
+
+                        int charInt;
+                        short dayIndex = 0;
+                        while (true) {
+                            position++;
+                            charInt = bb[position];
+                            charInt = charInt - 48;
+                            if (charInt < 0) {
+                                break;
+                            }
+                            dayIndex = (short) (dayIndex * 10 + charInt);
+                        }
+
+                        int price = 0;
+                        while (true) {
+                            position++;
+                            charInt = bb[position];
+                            charInt = charInt - 48;
+                            if (charInt < 0) {
+                                break;
+                            }
+                            price = price * 10 + charInt;
+                        }
+                        addFlightToData(from, to, dayIndex, price);
+                        if (position == BB_SIZE - 1) {
+                            position = 0;
+                        } else {
+                            position++;
+                        }
+                    } else {
+                        if (BB_SIZE - position < 7) {
+                            // nemame ani mesta
+                            byte[] toRead = new byte[7 - (BB_SIZE - position)];
+                            input.readFully(toRead);
+                            byte[] cities = new byte[7];
+                            int index = 0;
+                            for (int i = position; i < BB_SIZE; i++) {
+                                cities[index++] = bb[i];
+                                position++;
+                            }
+                            for (byte b : toRead) {
+                                cities[index++] = b;
+                            }
+
+                            short from = cityNameMapper.nameToIndex(new CityName(cities[0], cities[1], cities[2]));
+                            short to = cityNameMapper.nameToIndex(new CityName(cities[4], cities[5], cities[6]));
+
+                            input.read();
+                            int charInt;
+                            short dayIndex = 0;
+                            while (true) {
+                                charInt = input.read();
+                                charInt = charInt - 48;
+                                if (charInt < 0) {
+                                    break;
+                                }
+                                dayIndex = (short) (dayIndex * 10 + charInt);
+                            }
+
+                            int price = 0;
+                            while (true) {
+                                charInt = input.read();
+                                charInt = charInt - 48;
+                                if (charInt < 0) {
+                                    break;
+                                }
+                                price = price * 10 + charInt;
+                            }
+                            addFlightToData(from, to, dayIndex, price);
+                            position = 0;
+                        } else {
+                            // mame mesta - musime cist, kdyz nam zbyde neco navic, tak budeme muset cist jeste jeden radek po bajtech
+                            short from = cityNameMapper.nameToIndex(new CityName(bb[position++], bb[position++], bb[position++]));
+                            position++;
+                            short to = cityNameMapper.nameToIndex(new CityName(bb[position++], bb[position++], bb[position++]));
+
+                            if (BB_SIZE - position == 0) {
+                                //uz nemam v bb cisla
+                                input.read();
+                                int charInt;
+                                short dayIndex = 0;
+                                while (true) {
+                                    charInt = input.read();
+                                    charInt = charInt - 48;
+                                    if (charInt < 0) {
+                                        break;
+                                    }
+                                    dayIndex = (short) (dayIndex * 10 + charInt);
+                                }
+
+                                int price = 0;
+                                while (true) {
+                                    charInt = input.read();
+                                    charInt = charInt - 48;
+                                    if (charInt < 0) {
+                                        break;
+                                    }
+                                    price = price * 10 + charInt;
+                                }
+                                addFlightToData(from, to, dayIndex, price);
+
+                                position = 0;
+                            } else {
+                                // jeste mi v bb neco zbyva
+                                position++;
+                                int charInt;
+                                short dayIndex = 0;
+                                while (true) {
+                                    if (position < BB_SIZE) {
+                                        charInt = bb[position++];
+                                    } else {
+                                        charInt = input.read();
+                                    }
+                                    charInt = charInt - 48;
+                                    if (charInt < 0) {
+                                        break;
+                                    }
+                                    dayIndex = (short) (dayIndex * 10 + charInt);
+                                }
+
+                                int price = 0;
+                                while (true) {
+                                    if (position < BB_SIZE) {
+                                        charInt = bb[position++];
+                                    } else {
+                                        charInt = input.read();
+                                    }
+                                    charInt = charInt - 48;
+                                    if (charInt < 0) {
+                                        break;
+                                    }
+                                    price = price * 10 + charInt;
+                                }
+                                addFlightToData(from, to, dayIndex, price);
+
+                                if (position >= BB_SIZE) {
+                                    position = 0;
+                                } else {
+                                    // tak nam jeste neco zbyva a musime to precist - novy radek
+                                    // nemame ani mesta
+                                    byte[] toRead = new byte[7 - (BB_SIZE - position)];
+                                    input.readFully(toRead);
+                                    byte[] cities = new byte[7];
+                                    int index = 0;
+                                    for (int i = position; i < BB_SIZE; i++) {
+                                        cities[index++] = bb[i];
+                                        position++;
+                                    }
+                                    for (byte b : toRead) {
+                                        cities[index++] = b;
+                                    }
+
+                                    from = cityNameMapper.nameToIndex(new CityName(cities[0], cities[1], cities[2]));
+                                    to = cityNameMapper.nameToIndex(new CityName(cities[4], cities[5], cities[6]));
+
+                                    input.read();
+                                    charInt = 0;
+                                    dayIndex = 0;
+                                    while (true) {
+                                        charInt = input.read();
+                                        charInt = charInt - 48;
+                                        if (charInt < 0) {
+                                            break;
+                                        }
+                                        dayIndex = (short) (dayIndex * 10 + charInt);
+                                    }
+
+                                    price = 0;
+                                    while (true) {
+                                        charInt = input.read();
+                                        charInt = charInt - 48;
+                                        if (charInt < 0) {
+                                            break;
+                                        }
+                                        price = price * 10 + charInt;
+                                    }
+                                    addFlightToData(from, to, dayIndex, price);
+
+                                    position = 0;
+                                }
+                            }
+                        }
+                    }
+
+                }
+            } catch (EOFException e) {
+                // dat je min nez buffer size a precist 0..position
+                while (bb[position] != 0) {
+                    short from = cityNameMapper.nameToIndex(new CityName(bb[position++], bb[position++], bb[position++]));
+                    position++;
+                    short to = cityNameMapper.nameToIndex(new CityName(bb[position++], bb[position++], bb[position++]));
+                    position++;
+                    int charInt;
+                    short dayIndex = 0;
+                    while (true) {
+                        charInt = bb[position++];
+                        charInt = charInt - 48;
+                        if (charInt < 0) {
+                            break;
+                        }
+                        dayIndex = (short) (dayIndex * 10 + charInt);
+                    }
+
+                    int price = 0;
+                    while (true) {
+                        charInt = bb[position++];
+                        charInt = charInt - 48;
+                        if (charInt < 0) {
+                            break;
+                        }
+                        price = price * 10 + charInt;
+                    }
+                    addFlightToData(from, to, dayIndex, price);
+                }
+                logger.info("EOF reached - ok - all data was read.");
             }
-        } catch (EOFException eofe) {
+            break;
         }
-
     }
 
     private void readFirstLineWithStartTown() throws Exception {
@@ -43,50 +279,6 @@ public class InputParser {
         CityName startTown = new CityName(cb[0], cb[1], cb[2]);
         data.startCity = cityNameMapper.nameToIndex(startTown);
         input.read();//eol
-    }
-
-    private byte index = 8;
-
-    private boolean readAndParseLine() throws IOException {
-        input.readFully(buffer);
-        short from = cityNameMapper.nameToIndex(new CityName(buffer[0], buffer[1], buffer[2]));
-        short to = cityNameMapper.nameToIndex(new CityName(buffer[4], buffer[5], buffer[6]));
-        
-        int charInt;
-        short dayIndex = 0;
-        while (true) {
-            if (index < 12) {
-                charInt = buffer[index];
-                index++;
-            } else {
-                charInt = input.read();
-            }
-            charInt = charInt - 48;
-            if (charInt < 0) {
-                break;
-            }
-            dayIndex = (short) (dayIndex * 10 + charInt);
-        }
-
-        int price = 0;
-        while (true) {
-            if (index < 12) {
-                charInt = buffer[index];
-                index++;
-            } else {
-                charInt = input.read();
-            }
-            charInt = charInt - 48;
-            if (charInt < 0) {
-                break;
-            }
-            price = price * 10 + charInt;
-        }
-        index = 8;
-
-        addFlightToData(from, to, dayIndex, price);
-
-        return charInt != -49;
     }
 
     private void addFlightToData(short from, short to, short dayIndex, int price) {
