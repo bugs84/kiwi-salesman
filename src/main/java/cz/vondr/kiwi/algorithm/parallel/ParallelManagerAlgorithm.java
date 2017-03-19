@@ -11,8 +11,8 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import static cz.vondr.kiwi.algorithm.parallel.BruteForceWithInitState.NO_CITY;
@@ -27,7 +27,7 @@ public class ParallelManagerAlgorithm implements Algorithm {
     private final List<BruteForceWithInitState> activeOrFinishedAlgorithm = synchronizedList(new ArrayList<>());
 
     //    private ExecutorService threadPool;
-    private ExecutorService threadPool;
+    private ThreadPoolExecutor threadPool;
 
     public Solution getBestSolution() {
         return bestSolutionHolder.get();
@@ -36,7 +36,7 @@ public class ParallelManagerAlgorithm implements Algorithm {
     @Override
     public void init() {
 //        Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-        threadPool = Executors.newFixedThreadPool(20);
+        threadPool = (ThreadPoolExecutor) Executors.newFixedThreadPool(20);
     }
 
     @Override
@@ -46,7 +46,6 @@ public class ParallelManagerAlgorithm implements Algorithm {
         City city = day.cities[0];
         for (int actualFlight = 0; actualFlight < city.flights.length; actualFlight++) {
             Flight flight = city.flights[actualFlight];
-
 
             Runnable algorithmRunnable = () -> {
                 try {
@@ -100,6 +99,7 @@ public class ParallelManagerAlgorithm implements Algorithm {
     @Override
     public void stop() {
 
+        threadPool.getQueue().clear();
         threadPool.shutdownNow();
         synchronized (activeOrFinishedAlgorithm) {
             activeOrFinishedAlgorithm.forEach(BruteForceWithInitState::stop);

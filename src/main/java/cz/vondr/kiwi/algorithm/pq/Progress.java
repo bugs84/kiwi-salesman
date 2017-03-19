@@ -14,8 +14,7 @@ public class Progress {
 
     public final int price;
 
-    //TODO
-    //tohle by se dalo pouzit, abych si mohl do queue ulozit i rozpracovane mesta (ze se z nej letelo jen nekam a ne vsude)
+
     public short flightsProcessed = 0;
 //    public int nextFlightPrice;
 
