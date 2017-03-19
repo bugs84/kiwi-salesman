@@ -82,7 +82,7 @@ public class BruteForceWithInitState {
 
         doNextFlight(actualDay, actualCity, actualPrice);
 
-        logger.info("BruteForce Ended - testedFlights= " + testedFlights);
+//        logger.info("BruteForce Ended - testedFlights= " + testedFlights);
     }
 
     short tmpFirstFlight = 0;
@@ -92,7 +92,9 @@ public class BruteForceWithInitState {
         if (stopped) {
             return;
         }
-
+        if (testedFlights > 2_000_000) {
+            return;
+        }
 
         Day day = data.days[actualDay];
         City city = day.cities[actualCity];
