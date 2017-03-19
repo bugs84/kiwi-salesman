@@ -92,7 +92,7 @@ public class BruteForceWithInitState {
         if (stopped) {
             return;
         }
-        if (testedFlights > 500_000) {
+        if (numberOfCities>29 && testedFlights > 500_000) {
             return;
         }
 
