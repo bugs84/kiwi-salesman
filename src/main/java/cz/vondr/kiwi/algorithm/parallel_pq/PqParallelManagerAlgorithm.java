@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Comparator;
 import java.util.List;
@@ -69,24 +70,18 @@ public class PqParallelManagerAlgorithm implements Algorithm {
 
     private static final int QUEUE_INITIAL_CAPACITY = 5000;
 
-    //TODO TOHLE !!! kolosalne vylestit
     private final Comparator<Progress> comparator = (p1, p2) -> {
-        //        if (p2.path.length < 3 || p1.path.length < 3) {
-        //            return p1.path.length - p2.path.length;
-        //        }
-
-        ////        if (bestSolution.price != MAX_VALUE) {
-        //            int flightsProcessedDiff = p1.flightsProcessed - p2.flightsProcessed;
-        //            if (flightsProcessedDiff != 0) {
-        //                return flightsProcessedDiff;
-        //            }
-        ////        }
+        //TODO asi se da jeste poladit - ale zalezi kudy chceme chodit
 
         int priorityDiff = p1.priorityPenalty - p2.priorityPenalty;
         if (priorityDiff != 0) {
             return priorityDiff;
         }
 
+        int flightsProcessedDiff = p1.flightsProcessed - p2.flightsProcessed;
+        if (flightsProcessedDiff != 0) {
+            return flightsProcessedDiff;
+        }
 
         //        1a) delsi cesta (do hloubky)
         int pathDiff = p2.path.length - p1.path.length;
@@ -98,10 +93,7 @@ public class PqParallelManagerAlgorithm implements Algorithm {
             return pathDiff;
         }
 
-        int flightsProcessedDiff = p1.flightsProcessed - p2.flightsProcessed;
-        if (flightsProcessedDiff != 0) {
-            return flightsProcessedDiff;
-        }
+
 
 
         //        2) lepsi cena
@@ -167,10 +159,12 @@ public class PqParallelManagerAlgorithm implements Algorithm {
             }
 
 
-            p.flightsProcessed++;
-            p.priorityPenalty++;
-            if (p.flightsProcessed < city.flights.length) {
-                addToQueue(p);
+            int actualPriorityPenalty = p.priorityPenalty;
+            Progress newP = p.copy();
+            newP.flightsProcessed++;
+            newP.priorityPenalty++;
+            if (newP.flightsProcessed < city.flights.length) {
+                addToQueue(newP);
             }
 
             //process deeper path
@@ -215,7 +209,7 @@ public class PqParallelManagerAlgorithm implements Algorithm {
             BitSet nextVisitedCities = (BitSet) p.visitedCities.clone();
             nextVisitedCities.set(nextCity);
             //                logger.info("Fly from " + actualCity + " to " + nextCity);
-            int nextPriorityPenalty = p.priorityPenalty + actualFlight + 1;
+            int nextPriorityPenalty = actualPriorityPenalty + actualFlight + 1;
             addToQueue(new Progress(nextPath, nextVisitedCities, nextPrice, nextPriorityPenalty));
 
 
@@ -247,7 +241,6 @@ public class PqParallelManagerAlgorithm implements Algorithm {
 
                 bruteForceWithInitState.init(actualPath, actualDayIndex, (short) 0, (short) 9999/*process all flights*/, 0);
 
-
                 bruteForceWithInitState.start();
             } catch (Exception e) {
                 //this should never happen, but who knows...  Return at least something...
@@ -278,9 +271,10 @@ public class PqParallelManagerAlgorithm implements Algorithm {
                 //            actualPath[1] = 9;
                 //            actualDayIndex = 2;
                 //            bruteForceWithInitState.init(actualPath, actualDayIndex, (short) 0, (short)4, 908);
-                bruteForceWithInitState.init(actualPath, actualDayIndex, (short) p.flightsProcessed, (short) p.flightsProcessed, p.price);
+                bruteForceWithInitState.init(actualPath, actualDayIndex, p.flightsProcessed, p.flightsProcessed, p.price);
 
 
+                logger.info("Start PQ - " + Arrays.toString(p.path) + " - flight=" + p.flightsProcessed + ",  pPenalty="+ p.priorityPenalty + ",  price=" + p.price);
                 bruteForceWithInitState.start();
             } catch (Exception e) {
                 //this should never happen, but who knows...  Return at least something...
@@ -289,6 +283,7 @@ public class PqParallelManagerAlgorithm implements Algorithm {
             }
         };
 
+//        logger.info("Add   PQ - " + Arrays.toString(p.path) + " - flight=" + p.flightsProcessed + ",  pPenalty="+ p.priorityPenalty + ",  price=" + p.price);
         threadPool.execute(algorithmRunnable);
 
 
