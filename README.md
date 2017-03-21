@@ -7,10 +7,12 @@ https://github.com/kiwicom
 
 Code is quite unreadable with no intention for further maintenance.
 
-build:
+**build:**
+
 gradlew shadowJar
 
-run:
+**run:**
+
 java -jar build/libs/kiwi-salesman-1.0-SNAPSHOT-all.jar
 
 Or from Use class "cz.vondr.kiwi.SimpleTest" - in src/test
